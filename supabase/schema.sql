@@ -51,7 +51,7 @@ create table public.certificates (
   user_id uuid references public.profiles(id) on delete cascade not null,
   title text not null,
   issuer text not null,
-  issue_date date,
+  issue_date text,
   file_url text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -62,7 +62,7 @@ create table public.awards (
   user_id uuid references public.profiles(id) on delete cascade not null,
   title text not null,
   description text,
-  date date,
+  date text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
