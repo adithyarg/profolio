@@ -50,4 +50,5 @@ export async function deleteProject(id: string) {
         .eq("user_id", user.id)
 
     revalidatePath("/dashboard/projects")
+    redirect("/dashboard/projects?deleted=1")
 }

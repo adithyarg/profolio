@@ -33,4 +33,5 @@ export async function deleteExperience(id: string) {
 
     await supabase.from("experiences").delete().eq("id", id).eq("user_id", user.id)
     revalidatePath("/dashboard/experience")
+    redirect("/dashboard/experience?deleted=1")
 }

@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Github, ExternalLink, Trash2, FolderGit2, CheckCircle2, AlertCircle } from "lucide-react"
+import { DeleteButton } from "@/components/delete-button"
 
 export default async function DashboardProjectsPage({
     searchParams
 }: {
-    searchParams: { success?: string; error?: string }
+    searchParams: { success?: string; error?: string; deleted?: string }
 }) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -31,6 +32,12 @@ export default async function DashboardProjectsPage({
                 <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
                     <CheckCircle2 className="h-5 w-5 shrink-0" />
                     Project added successfully!
+                </div>
+            )}
+            {searchParams?.deleted && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Project deleted successfully!
                 </div>
             )}
             {searchParams?.error && (
@@ -72,9 +79,7 @@ export default async function DashboardProjectsPage({
                                     "use server"
                                     await deleteProject(project.id)
                                 }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button type="submit" className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
+                                    <DeleteButton itemName="project" onDelete={() => {}} />
                                 </form>
 
                                 <div className="space-y-3 pr-10">
