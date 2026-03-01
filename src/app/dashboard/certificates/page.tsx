@@ -53,11 +53,15 @@ async function createCertificate(formData: FormData) {
         }
     }
 
+    const month = formData.get("issue_month") as string
+    const year = formData.get("issue_year") as string
+    const issue_date = (month && year) ? `${month} ${year}` : null
+
     const certificate = {
         user_id: user.id,
         title: formData.get("title") as string,
         issuer: formData.get("issuer") as string,
-        issue_date: formData.get("issue_date") ? formData.get("issue_date") as string : null,
+        issue_date: issue_date,
         file_url: file_url || null,
     }
 
@@ -203,8 +207,38 @@ export default async function CertificatesPage({
                                 <Input id="issuer" name="issuer" required placeholder="e.g. Amazon Web Services" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="issue_date" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Date Issued</Label>
-                                <Input id="issue_date" name="issue_date" type="text" placeholder="e.g. Oct 2023" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <Label htmlFor="issue_month" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Date Issued</Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <select 
+                                        id="issue_month" 
+                                        name="issue_month" 
+                                        className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                    >
+                                        <option value="">Month</option>
+                                        <option value="Jan">January</option>
+                                        <option value="Feb">February</option>
+                                        <option value="Mar">March</option>
+                                        <option value="Apr">April</option>
+                                        <option value="May">May</option>
+                                        <option value="Jun">June</option>
+                                        <option value="Jul">July</option>
+                                        <option value="Aug">August</option>
+                                        <option value="Sep">September</option>
+                                        <option value="Oct">October</option>
+                                        <option value="Nov">November</option>
+                                        <option value="Dec">December</option>
+                                    </select>
+                                    <select 
+                                        id="issue_year" 
+                                        name="issue_year" 
+                                        className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                    >
+                                        <option value="">Year</option>
+                                        {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                            <option key={year} value={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
