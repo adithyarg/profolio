@@ -123,8 +123,78 @@ export default async function ExperiencePage({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="duration" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Duration</Label>
-                            <Input id="duration" name="duration" placeholder="e.g. Jan 2020 - Present" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium max-w-md" />
+                            <Label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Duration</Label>
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Start Date */}
+                                <div className="space-y-2">
+                                    <p className="text-xs font-medium text-slate-600">Start Date</p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <select 
+                                            name="start_month" 
+                                            className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-3 font-medium text-slate-900 text-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                        >
+                                            <option value="">Month</option>
+                                            <option value="Jan">Jan</option>
+                                            <option value="Feb">Feb</option>
+                                            <option value="Mar">Mar</option>
+                                            <option value="Apr">Apr</option>
+                                            <option value="May">May</option>
+                                            <option value="Jun">Jun</option>
+                                            <option value="Jul">Jul</option>
+                                            <option value="Aug">Aug</option>
+                                            <option value="Sep">Sep</option>
+                                            <option value="Oct">Oct</option>
+                                            <option value="Nov">Nov</option>
+                                            <option value="Dec">Dec</option>
+                                        </select>
+                                        <select 
+                                            name="start_year" 
+                                            className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-3 font-medium text-slate-900 text-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                        >
+                                            <option value="">Year</option>
+                                            {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                <option key={year} value={year}>{year}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* End Date */}
+                                <div className="space-y-2">
+                                    <p className="text-xs font-medium text-slate-600">End Date</p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <select 
+                                            name="end_month" 
+                                            className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-3 font-medium text-slate-900 text-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                        >
+                                            <option value="">Month</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Jan">Jan</option>
+                                            <option value="Feb">Feb</option>
+                                            <option value="Mar">Mar</option>
+                                            <option value="Apr">Apr</option>
+                                            <option value="May">May</option>
+                                            <option value="Jun">Jun</option>
+                                            <option value="Jul">Jul</option>
+                                            <option value="Aug">Aug</option>
+                                            <option value="Sep">Sep</option>
+                                            <option value="Oct">Oct</option>
+                                            <option value="Nov">Nov</option>
+                                            <option value="Dec">Dec</option>
+                                        </select>
+                                        <select 
+                                            name="end_year" 
+                                            className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-3 font-medium text-slate-900 text-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                        >
+                                            <option value="">Year</option>
+                                            {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                <option key={year} value={year}>{year}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="text-[11px] font-medium text-slate-400">Select "Present" in end month if you currently work here</p>
                         </div>
 
                         <div className="space-y-2 border-t pt-8">

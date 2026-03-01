@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Trash2, Trophy } from "lucide-react"
+import { Trash2, Trophy, CheckCircle2, AlertCircle } from "lucide-react"
+import { DeleteButton } from "@/components/delete-button"
 
 async function createAward(formData: FormData) {
     "use server"
@@ -12,15 +14,25 @@ async function createAward(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("Unauthorized")
 
+    // Build date string from dropdowns
+    const month = formData.get("award_month") as string
+    const year = formData.get("award_year") as string
+    const date = (month && year) ? `${month} ${year}` : year || null
+
     const award = {
         user_id: user.id,
         title: formData.get("title") as string,
         description: formData.get("description") as string,
-        date: formData.get("date") ? formData.get("date") as string : null,
+        date: date,
     }
 
-    await supabase.from("awards").insert([award])
+    const { error } = await supabase.from("awards").insert([award])
+    if (error) {
+        redirect("/dashboard/awards?error=" + encodeURIComponent(error.message))
+    }
+
     revalidatePath("/dashboard/awards")
+    redirect("/dashboard/awards?success=1")
 }
 
 async function deleteAward(id: string) {
@@ -31,9 +43,14 @@ async function deleteAward(id: string) {
 
     await supabase.from("awards").delete().eq("id", id).eq("user_id", user.id)
     revalidatePath("/dashboard/awards")
+    redirect("/dashboard/awards?deleted=1")
 }
 
-export default async function AwardsPage() {
+export default async function AwardsPage({
+    searchParams
+}: {
+    searchParams: { success?: string; error?: string; deleted?: string }
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return null
@@ -46,6 +63,27 @@ export default async function AwardsPage() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            
+            {/* Success / Error Banner */}
+            {searchParams?.success && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Award added successfully!
+                </div>
+            )}
+            {searchParams?.deleted && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Award deleted successfully!
+                </div>
+            )}
+            {searchParams?.error && (
+                <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 px-5 py-4 text-sm font-semibold">
+                    <AlertCircle className="h-5 w-5 shrink-0" />
+                    {decodeURIComponent(searchParams.error)}
+                </div>
+            )}
+
             <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-slate-900">Awards</h1>
                 <p className="text-base font-medium text-slate-500">Showcase special recognitions and honors.</p>
@@ -75,9 +113,7 @@ export default async function AwardsPage() {
                                     "use server"
                                     await deleteAward(award.id)
                                 }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button type="submit" className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
+                                    <DeleteButton itemName="award" />
                                 </form>
 
                                 <div className="h-10 w-10 shrink-0 bg-amber-50 rounded-full flex items-center justify-center border border-amber-100 hidden sm:flex">
@@ -109,7 +145,10 @@ export default async function AwardsPage() {
                     <p className="text-sm font-medium text-slate-500">Document a significant milestone or achievement.</p>
                 </div>
 
-                <form action={createAward}>
+                <form 
+                    key={searchParams?.success ? Date.now() : 'award-form'}
+                    action={createAward}
+                >
                     <div className="space-y-8">
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
@@ -117,9 +156,37 @@ export default async function AwardsPage() {
                                 <Input id="title" name="title" required placeholder="e.g. Employee of the Year" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="date" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Date Received</Label>
-                                <Input id="date" name="date" type="text" placeholder="e.g. 2023" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
-                                <p className="text-[11px] font-medium text-slate-400">Can be a full date or just a year</p>
+                                <Label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Date Received</Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <select 
+                                        name="award_month" 
+                                        className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                    >
+                                        <option value="">Month (Optional)</option>
+                                        <option value="Jan">January</option>
+                                        <option value="Feb">February</option>
+                                        <option value="Mar">March</option>
+                                        <option value="Apr">April</option>
+                                        <option value="May">May</option>
+                                        <option value="Jun">June</option>
+                                        <option value="Jul">July</option>
+                                        <option value="Aug">August</option>
+                                        <option value="Sep">September</option>
+                                        <option value="Oct">October</option>
+                                        <option value="Nov">November</option>
+                                        <option value="Dec">December</option>
+                                    </select>
+                                    <select 
+                                        name="award_year" 
+                                        className="h-12 rounded-xl border border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600"
+                                    >
+                                        <option value="">Year</option>
+                                        {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                            <option key={year} value={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <p className="text-[11px] font-medium text-slate-400">Month is optional, year only is fine</p>
                             </div>
                         </div>
 

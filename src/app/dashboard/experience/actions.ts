@@ -9,11 +9,27 @@ export async function createExperience(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("Unauthorized")
 
+    // Build duration string from date dropdowns
+    const startMonth = formData.get("start_month") as string
+    const startYear = formData.get("start_year") as string
+    const endMonth = formData.get("end_month") as string
+    const endYear = formData.get("end_year") as string
+
+    let duration = ""
+    if (startMonth && startYear) {
+        duration = `${startMonth} ${startYear}`
+        if (endMonth === "Present") {
+            duration += " - Present"
+        } else if (endMonth && endYear) {
+            duration += ` - ${endMonth} ${endYear}`
+        }
+    }
+
     const experience = {
         user_id: user.id,
         company: formData.get("company") as string,
         role: formData.get("role") as string,
-        duration: formData.get("duration") as string,
+        duration: duration || null,
         description: formData.get("description") as string,
     }
 
