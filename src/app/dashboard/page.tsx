@@ -3,7 +3,7 @@ import { updateProfile } from "./actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ExternalLink, CheckCircle2 } from "lucide-react"
 
 export default async function DashboardProfilePage() {
     const supabase = createClient()
@@ -18,72 +18,108 @@ export default async function DashboardProfilePage() {
         .single()
 
     return (
-        <div className="space-y-6">
-            <div>
-                <h3 className="text-2xl font-medium">Profile</h3>
-                <p className="text-sm text-muted-foreground">
-                    Update your public profile information.
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="space-y-1">
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Profile</h1>
+                <p className="text-base font-medium text-slate-500">
+                    Manage your identity and what recruiters see on your public portfolio.
                 </p>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                    <CardDescription>
-                        This information will be displayed on your generated portfolio.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form action={updateProfile}>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="full_name">Full Name</Label>
+            {/* Public Link Card */}
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/5 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+                <div className="space-y-2 relative z-10">
+                    <h2 className="text-lg font-bold text-indigo-900">Your Portfolio Link</h2>
+                    <p className="text-sm font-medium text-indigo-700/80 max-w-lg">
+                        Share this custom link with recruiters or on your social profiles. The page is completely read-only for visitors.
+                    </p>
+                    <div className="pt-2">
+                        <code className="text-sm font-semibold text-indigo-800 bg-white/60 px-3 py-1.5 rounded-md border border-indigo-200/50 select-all">
+                            profolio.vercel.app/{profile?.username || user.id}
+                        </code>
+                    </div>
+                </div>
+                <Button variant="default" className="relative z-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-600/20" asChild>
+                    <a href={`/${profile?.username || user.id}`} target="_blank" rel="noreferrer">
+                        Preview Profile <ExternalLink className="h-4 w-4 ml-2" />
+                    </a>
+                </Button>
+            </div>
+
+            {/* Form Card */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
+                <div className="space-y-1 mb-8">
+                    <h2 className="text-xl font-bold text-slate-900">Personal Information</h2>
+                    <p className="text-sm font-medium text-slate-500">Update your core details.</p>
+                </div>
+
+                <form action={async (formData) => {
+                    "use server"
+                    await updateProfile(formData)
+                }}>
+                    <div className="space-y-8">
+                        <div className="grid sm:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <Label htmlFor="full_name" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Full Name</Label>
                                 <Input
                                     id="full_name"
                                     name="full_name"
                                     defaultValue={profile?.full_name || ""}
-                                    placeholder="Max Robinson"
+                                    placeholder="e.g. Alex Robinson"
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
                                 />
+                                <p className="text-[11px] font-medium text-slate-400">Displayed prominently at the top of your portfolio.</p>
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="headline">Headline</Label>
-                                <Input
-                                    id="headline"
-                                    name="headline"
-                                    defaultValue={profile?.headline || ""}
-                                    placeholder="Senior Software Engineer at TechCorp"
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="location">Location</Label>
+                            <div className="space-y-2">
+                                <Label htmlFor="location" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Location</Label>
                                 <Input
                                     id="location"
                                     name="location"
                                     defaultValue={profile?.location || ""}
-                                    placeholder="San Francisco, CA"
+                                    placeholder="e.g. San Francisco, CA"
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
                                 />
                             </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="bio">Bio</Label>
-                                {/* We use textarea manually or shadcn Textarea. We haven't installed it, so fallback to HTML textarea styled with tailwind */}
-                                <textarea
-                                    id="bio"
-                                    name="bio"
-                                    defaultValue={profile?.bio || ""}
-                                    rows={5}
-                                    className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                    placeholder="Tell us about yourself..."
-                                />
-                            </div>
-
-                            <Button type="submit">Save Profile</Button>
                         </div>
-                    </form>
-                </CardContent>
-            </Card>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="headline" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Headline</Label>
+                            <Input
+                                id="headline"
+                                name="headline"
+                                defaultValue={profile?.headline || ""}
+                                placeholder="e.g. Senior Product Designer building accessible tools"
+                                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                            />
+                            <p className="text-[11px] font-medium text-slate-400">Keep it short, impactful, and specific to your role.</p>
+                        </div>
+
+                        <div className="space-y-2 border-t pt-8">
+                            <Label htmlFor="bio" className="text-xs font-semibold uppercase tracking-wider text-slate-500">About Section (Bio)</Label>
+                            <textarea
+                                id="bio"
+                                name="bio"
+                                defaultValue={profile?.bio || ""}
+                                rows={6}
+                                className="flex w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600 font-medium resize-y"
+                                placeholder="Tell your professional story..."
+                            />
+                            <p className="text-[11px] font-medium text-slate-400">Write 2-3 short paragraphs explaining your journey, current focus, and what drives you.</p>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-4 border-t pt-8">
+                            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 opacity-0 animate-in fade-in duration-1000 fill-mode-forwards delay-500 hidden peer-checked:flex">
+                                <CheckCircle2 className="h-4 w-4" /> Saved just now
+                            </div>
+                            <Button type="submit" className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                                Save Profile Changes
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

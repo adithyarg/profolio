@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, ExternalLink, Mail, MapPin, Briefcase } from "lucide-react"
+import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail } from "lucide-react"
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
     const supabase = createClient()
@@ -30,24 +28,12 @@ export async function generateMetadata({ params }: { params: { username: string 
 export default async function PortfolioPage({ params }: { params: { username: string } }) {
     const supabase = createClient()
 
-    // Wait, Next.js metadata and page need to fetch user, actually the username is in auth.users ideally but auth.users can't easily be queried without service_role key due to RLS, or we simply add `username` to `profiles` table. Let me check my schema...
-    // In `00_schema.sql` I didn't add username to profiles! I only have `users` table wait no, Supabase `auth.users` doesn't have a public username, but the `users` table from public was supposed to be there. But my schema only has `profiles` mapping to `auth.users`. And `profiles` doesn't have `username` explicitly unless it was added!
-    // Wait, "users" table was mentioned in plan but not explicitly created in the 00_schema `create table public.profiles ( ... )` did I include username? Let me check schema.
-    // I must query profiles by checking if we have a username, but we didn't add `username` column to `profiles`.
-    // Wait, how did I get username during registration? `data: { username: data.username }` in raw_user_meta_data.
-    // In `handle_new_user` I could insert username if it existed on the table. But the database doesn't have the username column. 
-    // Let's modify the code to assume we just use `id` for now or wait, the prompt says `/[username]`. 
-    // Since I don't have username, maybe I can just fetch from profiles if I alter the table to include username!
-
-    // For the sake of this file working right now before altering schema, I will try to query `profiles` by `id` directly if they pass `id` in the URL, OR we alter table profiles to have `username`. Let's assume we alter it later and use `username`.
-
     const { data: profile } = await supabase
         .from("profiles")
         .select("*, auth_user_id:id")
-        .eq("id", params.username) // Fallback temporarily using ID if username fails
+        .eq("id", params.username)
         .maybeSingle()
 
-    // Temporary hack: we will just use the profile ID as the URL parameter until I fix the DB schema to have actual unique usernames. 
     if (!profile) return notFound()
 
     // Track page view asynchronously
@@ -68,157 +54,225 @@ export default async function PortfolioPage({ params }: { params: { username: st
     ])
 
     return (
-        <div className="min-h-screen bg-background font-sans text-foreground pb-20">
-            {/* Hero Section */}
-            <header className="py-20 px-4 max-w-4xl mx-auto space-y-6">
-                <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl">
-                    {profile.full_name || "Anonymous User"}
-                </h1>
-                <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                    {profile.headline || "Professional Portfolio"}
-                </p>
-                <div className="flex flex-wrap gap-4 pt-4">
-                    <Button asChild>
-                        <a href="#contact">Contact Me</a>
+        <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-indigo-500/30 pb-20 scroll-smooth">
+
+            {/* Sticky Navigation */}
+            <nav className="sticky top-0 z-50 w-full border-b border-slate-200/50 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 transition-all">
+                <div className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+                    <span className="font-bold tracking-tight text-slate-900">{profile.full_name}</span>
+                    <div className="hidden lg:flex gap-8 text-[13px] font-semibold tracking-wide uppercase text-slate-500">
+                        {profile.bio && <a href="#about" className="hover:text-indigo-600 transition-colors">About</a>}
+                        {experiences?.length > 0 && <a href="#experience" className="hover:text-indigo-600 transition-colors">Experience</a>}
+                        {projects?.length > 0 && <a href="#projects" className="hover:text-indigo-600 transition-colors">Projects</a>}
+                        {skills?.length > 0 && <a href="#skills" className="hover:text-indigo-600 transition-colors">Skills</a>}
+                    </div>
+                    <Button asChild size="sm" className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white shadow-md shadow-slate-900/10">
+                        <a href="#contact">Hire Me</a>
                     </Button>
-                    {profile.location && (
-                        <div className="flex items-center text-muted-foreground text-sm gap-2">
-                            <MapPin className="h-4 w-4" /> {profile.location}
-                        </div>
-                    )}
                 </div>
-            </header>
+            </nav>
 
-            <main className="px-4 max-w-4xl mx-auto space-y-24 mt-10">
-                {/* About Section */}
-                {profile.bio && (
-                    <section id="about" className="space-y-4">
-                        <h2 className="text-3xl font-bold tracking-tight">About</h2>
-                        <p className="leading-7 text-muted-foreground whitespace-pre-wrap">
-                            {profile.bio}
-                        </p>
-                    </section>
-                )}
+            <main className="container mx-auto px-6 max-w-6xl mt-16 md:mt-24">
 
-                {/* Experience Section */}
-                {experiences && experiences.length > 0 && (
-                    <section id="experience" className="space-y-8">
-                        <h2 className="text-3xl font-bold tracking-tight">Experience</h2>
-                        <div className="space-y-8 border-l-2 border-muted pl-6 ml-3">
-                            {experiences.map((exp: any) => (
-                                <div key={exp.id} className="relative">
-                                    <span className="absolute -left-[35px] top-1 bg-background border-2 border-muted h-4 w-4 rounded-full" />
-                                    <h3 className="text-xl font-semibold">{exp.role}</h3>
-                                    <div className="text-muted-foreground flex items-center gap-2 mb-2">
-                                        <Briefcase className="h-4 w-4" /> {exp.company} • {exp.duration}
+                {/* Hero Section */}
+                <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-16 md:pb-24 border-b border-slate-200">
+                    <div className="max-w-4xl space-y-6">
+                        <h1 className="text-[2.5rem] leading-[1.1] md:text-[4rem] font-extrabold tracking-tight text-slate-900">
+                            {profile.full_name || "Professional"}
+                        </h1>
+                        <h2 className="text-xl md:text-3xl text-slate-500 font-medium leading-snug max-w-3xl">
+                            {profile.headline || "Digital Portfolio"}
+                        </h2>
+                        {profile.location && (
+                            <div className="inline-flex items-center text-sm font-semibold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm mt-4">
+                                <MapPin className="h-4 w-4 mr-2 text-indigo-500" />
+                                {profile.location}
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                {/* Split Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 pt-16 md:pt-24 relative">
+
+                    {/* Left Column: Context & Skills (Sticky) */}
+                    <div className="lg:col-span-4 relative">
+                        <div className="lg:sticky lg:top-32 space-y-12">
+                            {/* About Section */}
+                            {profile.bio && (
+                                <section id="about" className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                                    <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 mb-6">About</h3>
+                                    <p className="leading-relaxed text-slate-700 font-medium text-base whitespace-pre-wrap">
+                                        {profile.bio}
+                                    </p>
+                                </section>
+                            )}
+
+                            {/* Skills Section */}
+                            {skills && skills.length > 0 && (
+                                <section id="skills" className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+                                    <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 mb-6">Core Competencies</h3>
+                                    <div className="flex flex-wrap gap-2.5">
+                                        {skills.map((skill: any) => (
+                                            <div key={skill.id} className="inline-flex items-center bg-slate-50 border border-slate-200 rounded-full px-3.5 py-1.5 text-sm font-semibold text-slate-700">
+                                                <CheckCircle2 className="h-3.5 w-3.5 mr-2 text-indigo-500" />
+                                                {skill.skill_name}
+                                            </div>
+                                        ))}
                                     </div>
-                                    <p className="text-muted-foreground">{exp.description}</p>
-                                </div>
-                            ))}
+                                </section>
+                            )}
                         </div>
-                    </section>
-                )}
+                    </div>
 
-                {/* Projects Section */}
-                {projects && projects.length > 0 && (
-                    <section id="projects" className="space-y-8">
-                        <h2 className="text-3xl font-bold tracking-tight">Projects</h2>
-                        <div className="grid gap-6 md:grid-cols-2">
-                            {projects.map((project: any) => (
-                                <Card key={project.id} className="flex flex-col overflow-hidden border-border/50 bg-card hover:bg-accent/5 transition-colors">
-                                    <CardHeader>
-                                        <CardTitle className="flex justify-between items-start">
-                                            {project.title}
-                                            <div className="flex gap-2">
-                                                {project.github_url && (
-                                                    <a href={project.github_url} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
-                                                        <Github className="h-5 w-5" />
-                                                    </a>
-                                                )}
-                                                {project.demo_url && (
-                                                    <a href={project.demo_url} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
-                                                        <ExternalLink className="h-5 w-5" />
-                                                    </a>
+                    {/* Right Column: Experience, Projects, Awards */}
+                    <div className="lg:col-span-8 space-y-32">
+
+                        {/* Experience Section - Vertical Timeline */}
+                        {experiences && experiences.length > 0 && (
+                            <section id="experience" className="space-y-10">
+                                <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
+                                    <Briefcase className="h-4 w-4 text-slate-300" /> Professional Experience
+                                </h3>
+                                <div className="relative border-l-2 border-slate-100 ml-3 md:ml-0 space-y-12 pb-4">
+                                    {experiences.map((exp: any, index: number) => (
+                                        <div key={exp.id} className="relative pl-8 md:pl-12">
+                                            {/* Timeline Dot */}
+                                            <div className="absolute top-1.5 -left-[9px] h-4 w-4 rounded-full bg-white border-4 border-indigo-100 ring-2 ring-white"></div>
+
+                                            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between mb-3 gap-2">
+                                                <h4 className="text-xl font-bold text-slate-900">{exp.role}</h4>
+                                                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded w-fit inline-block">
+                                                    {exp.duration}
+                                                </span>
+                                            </div>
+                                            <div className="text-indigo-600 font-semibold mb-4">{exp.company}</div>
+                                            <p className="text-slate-600 leading-relaxed font-medium">
+                                                {exp.description}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Projects Section */}
+                        {projects && projects.length > 0 && (
+                            <section id="projects" className="space-y-10">
+                                <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
+                                    <ExternalLink className="h-4 w-4 text-slate-300" /> Selected Works
+                                </h3>
+                                <div className="grid gap-6 md:grid-cols-2">
+                                    {projects.map((project: any) => (
+                                        <div key={project.id} className="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-300 flex flex-col h-full hover:-translate-y-1">
+                                            {/* Simulated large image preview header */}
+                                            <div className="h-32 bg-slate-50 border-b border-slate-100 p-6 flex items-end justify-between relative overflow-hidden">
+                                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-slate-50/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                <h4 className="text-xl font-bold text-slate-900 relative z-10">{project.title}</h4>
+                                                <div className="flex gap-2 relative z-10">
+                                                    {project.github_url && (
+                                                        <a href={project.github_url} target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-colors">
+                                                            <Github className="h-4 w-4" />
+                                                        </a>
+                                                    )}
+                                                    {project.demo_url && (
+                                                        <a href={project.demo_url} target="_blank" rel="noreferrer" className="h-8 w-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-colors">
+                                                            <ExternalLink className="h-4 w-4" />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="p-6 flex flex-col flex-1">
+                                                <p className="text-sm font-semibold text-slate-500 mb-4">{project.short_description}</p>
+                                                <p className="text-sm text-slate-600 leading-relaxed font-medium flex-1">
+                                                    {project.description}
+                                                </p>
+                                                <div className="flex flex-wrap gap-2 mt-6">
+                                                    {project.tech_stack?.map((tech: string, i: number) => (
+                                                        <span key={i} className="text-[10px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Credentials Section */}
+                        {(certificates?.length > 0 || awards?.length > 0) && (
+                            <section className="space-y-10">
+                                <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
+                                    <Award className="h-4 w-4 text-slate-300" /> Credentials & Honours
+                                </h3>
+                                <div className="space-y-4">
+                                    {/* Certificates */}
+                                    {certificates?.map((cert: any) => (
+                                        <div key={cert.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 rounded-2xl border border-slate-200 bg-white hover:border-indigo-200 transition-colors shadow-sm">
+                                            <div className="flex items-start gap-4">
+                                                <div className="h-10 w-10 shrink-0 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 hidden sm:flex">
+                                                    <Award className="h-5 w-5 text-indigo-500" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-slate-900">{cert.title}</h4>
+                                                    <p className="text-sm font-medium text-slate-500 mt-1">{cert.issuer} {cert.issue_date && `• ${cert.issue_date}`}</p>
+                                                </div>
+                                            </div>
+                                            {cert.file_url && (
+                                                <Button variant="outline" size="sm" asChild className="mt-4 sm:mt-0 shrink-0 rounded-full font-semibold px-4 border-slate-200 hover:bg-slate-50 hover:text-indigo-600 text-slate-600">
+                                                    <a href={cert.file_url} target="_blank" rel="noreferrer">View Credential <ChevronRight className="h-3 w-3 ml-1" /></a>
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                    {/* Awards */}
+                                    {awards?.map((award: any) => (
+                                        <div key={award.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 rounded-2xl border border-slate-200 bg-white shadow-sm border-l-4 border-l-indigo-500">
+                                            <div className="flex-1 pr-6">
+                                                <h4 className="font-bold text-slate-900">{award.title}</h4>
+                                                {award.description && (
+                                                    <p className="text-sm font-medium text-slate-600 mt-2">{award.description}</p>
                                                 )}
                                             </div>
-                                        </CardTitle>
-                                        <CardDescription>{project.short_description}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="flex-1">
-                                        <p className="text-sm text-muted-foreground mb-4">{project.description}</p>
-                                        <div className="flex flex-wrap gap-2 mt-auto">
-                                            {project.tech_stack?.map((tech: string, i: number) => (
-                                                <Badge key={i} variant="secondary">{tech}</Badge>
-                                            ))}
+                                            {award.date && (
+                                                <span className="text-[11px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 px-3 py-1 rounded shrink-0 mt-4 sm:mt-0">
+                                                    {award.date}
+                                                </span>
+                                            )}
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
-                {/* Skills Section */}
-                {skills && skills.length > 0 && (
-                    <section id="skills" className="space-y-6">
-                        <h2 className="text-3xl font-bold tracking-tight">Skills</h2>
-                        <div className="flex flex-wrap gap-3">
-                            {skills.map((skill: any) => (
-                                <Badge key={skill.id} className="text-sm px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 border-transparent">
-                                    {skill.skill_name}
-                                </Badge>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                    </div>
+                </div>
 
-                {/* Certs & Awards */}
-                {(certificates?.length || awards?.length) ? (
-                    <section id="recognitions" className="space-y-8">
-                        <h2 className="text-3xl font-bold tracking-tight">Recognitions</h2>
-                        <div className="grid gap-6 md:grid-cols-2">
-                            {certificates?.map((cert: any) => (
-                                <Card key={cert.id} className="border-l-4 border-l-blue-500 rounded-none border-y-0 border-r-0 shadow-sm bg-muted/20">
-                                    <CardHeader className="py-4">
-                                        <CardTitle className="text-lg">{cert.title}</CardTitle>
-                                        <CardDescription>{cert.issuer} • {cert.issue_date}</CardDescription>
-                                        {cert.file_url && (
-                                            <a href={cert.file_url} className="text-blue-500 text-sm mt-2 font-medium hover:underline inline-block">
-                                                View Credential
-                                            </a>
-                                        )}
-                                    </CardHeader>
-                                </Card>
-                            ))}
-                            {awards?.map((award: any) => (
-                                <Card key={award.id} className="border-l-4 border-l-amber-500 rounded-none border-y-0 border-r-0 shadow-sm bg-muted/20">
-                                    <CardHeader className="py-4">
-                                        <CardTitle className="text-lg">{award.title}</CardTitle>
-                                        <CardDescription>{award.date}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="pb-4">
-                                        <p className="text-sm">{award.description}</p>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                {/* Contact Footer */}
+                <section id="contact" className="py-32 border-t border-slate-200 mt-32 text-center">
+                    <div className="max-w-2xl mx-auto space-y-8 flex flex-col items-center">
+                        <div className="h-16 w-16 bg-white border border-slate-200 shadow-sm rounded-2xl flex items-center justify-center mb-4">
+                            <Mail className="h-8 w-8 text-indigo-600 stroke-[1.5]" />
                         </div>
-                    </section>
-                ) : null}
-
-                {/* Contact Section */}
-                <section id="contact" className="space-y-6 pt-10 border-t">
-                    <div className="text-center space-y-6">
-                        <h2 className="text-3xl font-bold tracking-tight">Get in Touch</h2>
-                        <p className="text-muted-foreground max-w-md mx-auto">
-                            Interested in working together or have a question? I'd love to hear from you.
-                        </p>
-                        {/* The user email isn't strictly public via profile but let's assume if they have a mailto link it could be there. I'll just use a generic placeholder since email isn't in profile table schema right now. */}
-                        <Button size="lg" className="rounded-full">
-                            Contact Me
+                        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                            Let's build something <br className="hidden md:block" /> meaningful together.
+                        </h2>
+                        <Button size="lg" className="rounded-full px-10 h-14 text-base font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xl shadow-slate-900/10 hover:-translate-y-1 transition-transform">
+                            Get In Touch
                         </Button>
                     </div>
                 </section>
+
             </main>
+
+            <footer className="text-center pb-8 pt-8">
+                <p className="text-xs font-semibold text-slate-400">
+                    Built with <a href="/" className="text-indigo-500 hover:text-indigo-600 transition-colors">Profolio</a>
+                </p>
+            </footer>
         </div>
     )
 }

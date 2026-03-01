@@ -3,9 +3,10 @@ import { createProject, deleteProject } from "./actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Github, ExternalLink, Trash2, FolderGit2 } from "lucide-react"
 
-export default async function ProjectsPage() {
+export default async function DashboardProjectsPage() {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -18,123 +19,132 @@ export default async function ProjectsPage() {
         .order("created_at", { ascending: false })
 
     return (
-        <div className="space-y-6">
-            <div>
-                <h3 className="text-2xl font-medium">Projects</h3>
-                <p className="text-sm text-muted-foreground">
-                    Manage your portfolio projects.
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="space-y-1">
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Projects</h1>
+                <p className="text-base font-medium text-slate-500">
+                    Showcase your best work. Added projects appear on your public portfolio instantly.
                 </p>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Add New Project</CardTitle>
-                    <CardDescription>
-                        Create a new project to showcase on your portfolio.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form action={createProject}>
-                        <div className="grid gap-4 lg:grid-cols-2">
-                            <div className="grid gap-2 lg:col-span-2">
-                                <Label htmlFor="title">Project Title</Label>
-                                <Input id="title" name="title" required placeholder="E-commerce Platform" />
-                            </div>
+            {/* List Existing Projects */}
+            <div className="space-y-6 border-b pb-12">
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <FolderGit2 className="h-5 w-5 text-indigo-600" /> Your Portfolio Projects
+                </h2>
 
-                            <div className="grid gap-2 lg:col-span-2">
-                                <Label htmlFor="short_description">Short Description</Label>
-                                <Input id="short_description" name="short_description" placeholder="A brief summary of the project" />
-                            </div>
+                {!projects || projects.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center p-12 text-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50">
+                        <div className="h-12 w-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+                            <FolderGit2 className="h-6 w-6 text-indigo-600" />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-900">No projects yet</h3>
+                        <p className="text-sm font-medium text-slate-500 mt-1 max-w-sm">
+                            Your projects will appear here. Add your first project below to start building your portfolio.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid gap-6 sm:grid-cols-2">
+                        {projects.map((project: any) => (
+                            <div key={project.id} className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
+                                <form action={async () => {
+                                    "use server"
+                                    await deleteProject(project.id)
+                                }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button type="submit" className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </form>
 
-                            <div className="grid gap-2 lg:col-span-2">
-                                <Label htmlFor="description">Full Description</Label>
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    rows={4}
-                                    className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                    placeholder="Detailed explanation of the project, your role, and the impact..."
-                                />
-                            </div>
+                                <div className="space-y-3 pr-10">
+                                    <h3 className="font-bold text-lg text-slate-900">{project.title}</h3>
+                                    <p className="text-sm font-medium text-slate-500">{project.short_description}</p>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="role">Your Role</Label>
-                                <Input id="role" name="role" placeholder="Lead Developer" />
-                            </div>
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                        {project.tech_stack?.map((tech: string, i: number) => (
+                                            <span key={i} className="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] uppercase tracking-wider font-bold rounded">
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="tech_stack">Tech Stack (comma separated)</Label>
-                                <Input id="tech_stack" name="tech_stack" placeholder="React, Node.js, PostgreSQL" />
+                                    <div className="flex items-center gap-4 pt-4 border-t border-slate-100 mt-4">
+                                        {project.github_url && (
+                                            <a href={project.github_url} target="_blank" rel="noreferrer" className="flex items-center text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+                                                <Github className="h-3.5 w-3.5 mr-1.5" /> Source
+                                            </a>
+                                        )}
+                                        {project.demo_url && (
+                                            <a href={project.demo_url} target="_blank" rel="noreferrer" className="flex items-center text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+                                                <ExternalLink className="h-3.5 w-3.5 mr-1.5" /> Live Demo
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
+                        ))}
+                    </div>
+                )}
+            </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="demo_url">Live Demo URL</Label>
-                                <Input id="demo_url" name="demo_url" type="url" placeholder="https://myproject.com" />
+            {/* Add New Form */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
+                <div className="space-y-1 mb-8">
+                    <h2 className="text-xl font-bold text-slate-900">Add New Project</h2>
+                    <p className="text-sm font-medium text-slate-500">Provide details about what you built and the technologies used.</p>
+                </div>
+
+                <form action={async (formData) => {
+                    "use server"
+                    await createProject(formData)
+                }}>
+                    <div className="space-y-8">
+                        <div className="grid sm:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <Label htmlFor="title" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Project Title *</Label>
+                                <Input id="title" name="title" required placeholder="e.g. E-Commerce Platform" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
                             </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="github_url">GitHub URL</Label>
-                                <Input id="github_url" name="github_url" type="url" placeholder="https://github.com/myusername/project" />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="start_date">Start Date</Label>
-                                <Input id="start_date" name="start_date" type="date" />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="end_date">End Date</Label>
-                                <Input id="end_date" name="end_date" type="date" />
-                            </div>
-
-                            <div className="lg:col-span-2 mt-2">
-                                <Button type="submit">Add Project</Button>
+                            <div className="space-y-2">
+                                <Label htmlFor="tech_stack" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Tech Stack</Label>
+                                <Input id="tech_stack" name="tech_stack" placeholder="React, Node.js, Postgres" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <p className="text-[11px] font-medium text-slate-400">Comma separated</p>
                             </div>
                         </div>
-                    </form>
-                </CardContent>
-            </Card>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {projects?.map((project) => (
-                    <Card key={project.id} className="flex flex-col">
-                        <CardHeader>
-                            <CardTitle>{project.title}</CardTitle>
-                            <CardDescription>{project.short_description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-1">
-                            <div className="text-sm text-muted-foreground mb-4">
-                                <strong>Role:</strong> {project.role || "N/A"}
+                        <div className="space-y-2">
+                            <Label htmlFor="short_description" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Short Description</Label>
+                            <Input id="short_description" name="short_description" placeholder="A brief 1-sentence summary" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="description" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Full Description</Label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                rows={4}
+                                className="flex w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600 font-medium resize-y"
+                                placeholder="Explain your role, the challenges faced, and the impact..."
+                            />
+                        </div>
+
+                        <div className="grid sm:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
+                            <div className="space-y-2">
+                                <Label htmlFor="github_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">GitHub Repository URL</Label>
+                                <Input id="github_url" name="github_url" type="url" placeholder="https://github.com/..." className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
                             </div>
-                            <div className="flex flex-wrap gap-2">
-                                {project.tech_stack?.map((tech: string, i: number) => (
-                                    <span key={i} className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full">
-                                        {tech}
-                                    </span>
-                                ))}
+                            <div className="space-y-2">
+                                <Label htmlFor="demo_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Demo URL</Label>
+                                <Input id="demo_url" name="demo_url" type="url" placeholder="https://your-app.com" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
                             </div>
-                        </CardContent>
-                        <CardFooter className="flex justify-between border-t p-4">
-                            <div className="flex gap-2">
-                                {project.demo_url && (
-                                    <a href={project.demo_url} target="_blank" rel="noreferrer" className="text-sm text-blue-500 hover:underline">Demo</a>
-                                )}
-                                {project.github_url && (
-                                    <a href={project.github_url} target="_blank" rel="noreferrer" className="text-sm text-blue-500 hover:underline">GitHub</a>
-                                )}
-                            </div>
-                            <form action={async () => {
-                                "use server"
-                                await deleteProject(project.id)
-                            }}>
-                                <Button variant="destructive" size="sm" type="submit">Delete</Button>
-                            </form>
-                        </CardFooter>
-                    </Card>
-                ))}
-                {projects?.length === 0 && (
-                    <p className="text-muted-foreground col-span-full">No projects added yet.</p>
-                )}
+                        </div>
+
+                        <div className="flex justify-end pt-4">
+                            <Button type="submit" className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
+                                Add Project
+                            </Button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     )
