@@ -6,6 +6,7 @@ create extension if not exists "uuid-ossp";
 -- Table: profiles
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade on update cascade,
+  username text unique,
   full_name text,
   headline text,
   bio text,
