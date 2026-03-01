@@ -1,10 +1,12 @@
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Trash2, Award, FileText } from "lucide-react"
+import { Trash2, Award, FileText, CheckCircle2, AlertCircle } from "lucide-react"
+import { DeleteButton } from "@/components/delete-button"
 
 async function createCertificate(formData: FormData) {
     "use server"
@@ -15,18 +17,39 @@ async function createCertificate(formData: FormData) {
     let file_url = ""
 
     const file = formData.get("file") as File
-    if (file && file.size > 0) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Math.random()}.${fileExt}`
-        const filePath = `${user.id}/${fileName}`
+    
+    console.log("[Certificate] File received:", file?.name, "size:", file?.size, "type:", file?.type)
+    
+    if (file && file.size > 0 && file.name !== "undefined") {
+        try {
+            // Convert file to ArrayBuffer for Supabase
+            const arrayBuffer = await file.arrayBuffer()
+            const fileExt = file.name.split('.').pop()
+            const fileName = `${user.id}-${Date.now()}.${fileExt}`
+            const filePath = fileName
 
-        const { error: uploadError } = await supabase.storage
-            .from('certificates')
-            .upload(filePath, file)
+            console.log("[Certificate] Uploading to path:", filePath, "size:", file.size)
 
-        if (!uploadError) {
-            const { data } = supabase.storage.from('certificates').getPublicUrl(filePath)
-            file_url = data.publicUrl
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('certificates')
+                .upload(filePath, arrayBuffer, {
+                    contentType: file.type,
+                    upsert: true
+                })
+
+            if (uploadError) {
+                console.error("[Certificate Upload Error]", uploadError.message, uploadError)
+                redirect("/dashboard/certificates?error=" + encodeURIComponent(`File upload failed: ${uploadError.message}`))
+            }
+
+            if (uploadData) {
+                const { data } = supabase.storage.from('certificates').getPublicUrl(filePath)
+                file_url = data.publicUrl
+                console.log("[Certificate] Uploaded successfully:", file_url)
+            }
+        } catch (err) {
+            console.error("[Certificate] Exception:", err)
+            redirect("/dashboard/certificates?error=" + encodeURIComponent("Failed to process certificate file"))
         }
     }
 
@@ -38,8 +61,14 @@ async function createCertificate(formData: FormData) {
         file_url: file_url || null,
     }
 
-    await supabase.from("certificates").insert([certificate])
+    const { error } = await supabase.from("certificates").insert([certificate])
+    
+    if (error) {
+        redirect("/dashboard/certificates?error=" + encodeURIComponent(error.message))
+    }
+
     revalidatePath("/dashboard/certificates")
+    redirect("/dashboard/certificates?success=1")
 }
 
 async function deleteCertificate(id: string) {
@@ -50,9 +79,14 @@ async function deleteCertificate(id: string) {
 
     await supabase.from("certificates").delete().eq("id", id).eq("user_id", user.id)
     revalidatePath("/dashboard/certificates")
+    redirect("/dashboard/certificates?deleted=1")
 }
 
-export default async function CertificatesPage() {
+export default async function CertificatesPage({
+    searchParams
+}: {
+    searchParams: { success?: string; error?: string; deleted?: string }
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return null
@@ -65,6 +99,27 @@ export default async function CertificatesPage() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            
+            {/* Success / Error Banner */}
+            {searchParams?.success && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Certificate added successfully!
+                </div>
+            )}
+            {searchParams?.deleted && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Certificate deleted successfully!
+                </div>
+            )}
+            {searchParams?.error && (
+                <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 px-5 py-4 text-sm font-semibold">
+                    <AlertCircle className="h-5 w-5 shrink-0" />
+                    {decodeURIComponent(searchParams.error)}
+                </div>
+            )}
+
             <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-slate-900">Certificates</h1>
                 <p className="text-base font-medium text-slate-500">Manage your verified credentials and courses.</p>
@@ -94,9 +149,7 @@ export default async function CertificatesPage() {
                                     "use server"
                                     await deleteCertificate(cert.id)
                                 }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button type="submit" className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
+                                    <DeleteButton itemName="certificate" />
                                 </form>
 
                                 <div className="space-y-2 pr-10 mb-6">
@@ -134,7 +187,11 @@ export default async function CertificatesPage() {
                     <p className="text-sm font-medium text-slate-500">Add the details and optionally upload the PDF or image file.</p>
                 </div>
 
-                <form action={createCertificate}>
+                <form 
+                    key={searchParams?.success ? Date.now() : 'certificate-form'}
+                    action={createCertificate}
+                    encType="multipart/form-data"
+                >
                     <div className="space-y-8">
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2 lg:col-span-2">
