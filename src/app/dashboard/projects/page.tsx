@@ -79,7 +79,7 @@ export default async function DashboardProjectsPage({
                                     "use server"
                                     await deleteProject(project.id)
                                 }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <DeleteButton itemName="project" onDelete={() => {}} />
+                                    <DeleteButton itemName="project" />
                                 </form>
 
                                 <div className="space-y-3 pr-10">

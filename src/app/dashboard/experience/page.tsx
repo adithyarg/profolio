@@ -75,7 +75,7 @@ export default async function ExperiencePage({
                                     "use server"
                                     await deleteExperience(exp.id)
                                 }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <DeleteButton itemName="experience" onDelete={() => {}} />
+                                    <DeleteButton itemName="experience" />
                                 </form>
 
                                 <div className="space-y-2 pr-10">

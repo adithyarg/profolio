@@ -4,21 +4,11 @@ import { useState } from "react"
 import { Trash2 } from "lucide-react"
 
 interface DeleteButtonProps {
-    onDelete: () => void
     itemName?: string
 }
 
-export function DeleteButton({ onDelete, itemName = "item" }: DeleteButtonProps) {
+export function DeleteButton({ itemName = "item" }: DeleteButtonProps) {
     const [showConfirm, setShowConfirm] = useState(false)
-
-    const handleClick = (e: React.MouseEvent) => {
-        e.preventDefault()
-        if (!showConfirm) {
-            setShowConfirm(true)
-            return
-        }
-        onDelete()
-    }
 
     return (
         <div className="relative">
@@ -40,7 +30,6 @@ export function DeleteButton({ onDelete, itemName = "item" }: DeleteButtonProps)
                         </button>
                         <button
                             type="submit"
-                            onClick={handleClick}
                             className="flex-1 px-3 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                         >
                             Delete
@@ -48,14 +37,19 @@ export function DeleteButton({ onDelete, itemName = "item" }: DeleteButtonProps)
                     </div>
                 </div>
             )}
-            <button
-                type="button"
-                onClick={handleClick}
-                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                title={`Delete ${itemName}`}
-            >
-                <Trash2 className="h-4 w-4" />
-            </button>
+            {!showConfirm && (
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setShowConfirm(true)
+                    }}
+                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title={`Delete ${itemName}`}
+                >
+                    <Trash2 className="h-4 w-4" />
+                </button>
+            )}
         </div>
     )
 }
