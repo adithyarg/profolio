@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function createExperience(formData: FormData) {
     const supabase = createClient()
@@ -17,10 +18,12 @@ export async function createExperience(formData: FormData) {
     }
 
     const { error } = await supabase.from("experiences").insert([experience])
-    if (error) return { error: error.message }
+    if (error) {
+        redirect("/dashboard/experience?error=" + encodeURIComponent(error.message))
+    }
 
     revalidatePath("/dashboard/experience")
-    return { success: true }
+    redirect("/dashboard/experience?success=1")
 }
 
 export async function deleteExperience(id: string) {

@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button"
 import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Trash2, Briefcase } from "lucide-react"
+import { Trash2, Briefcase, CheckCircle2, AlertCircle } from "lucide-react"
 
-export default async function ExperiencePage() {
+export default async function ExperiencePage({
+    searchParams
+}: {
+    searchParams: { success?: string; error?: string }
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return null
@@ -19,6 +23,21 @@ export default async function ExperiencePage() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            
+            {/* Success / Error Banner */}
+            {searchParams?.success && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Experience added successfully!
+                </div>
+            )}
+            {searchParams?.error && (
+                <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 px-5 py-4 text-sm font-semibold">
+                    <AlertCircle className="h-5 w-5 shrink-0" />
+                    {decodeURIComponent(searchParams.error)}
+                </div>
+            )}
+
             <div className="space-y-1">
                 <h1 className="text-3xl font-bold tracking-tight text-slate-900">Experience</h1>
                 <p className="text-base font-medium text-slate-500">Manage your work history.</p>

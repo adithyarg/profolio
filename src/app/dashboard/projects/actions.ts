@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function createProject(formData: FormData) {
     const supabase = createClient()
@@ -29,11 +30,11 @@ export async function createProject(formData: FormData) {
         .insert([project])
 
     if (error) {
-        return { error: error.message }
+        redirect("/dashboard/projects?error=" + encodeURIComponent(error.message))
     }
 
     revalidatePath("/dashboard/projects")
-    return { success: true }
+    redirect("/dashboard/projects?success=1")
 }
 
 export async function deleteProject(id: string) {
