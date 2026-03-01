@@ -53,7 +53,7 @@ export default function Home() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="h-14 px-8 text-base rounded-full border-slate-300 text-slate-700 hover:bg-slate-100 hidden sm:inline-flex">
-                  <Link href="/devgaming">See Example</Link>
+                  <Link href="/adithyarg">See Example</Link>
                 </Button>
               </div>
 
