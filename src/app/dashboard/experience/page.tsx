@@ -98,10 +98,13 @@ export default async function ExperiencePage({
                     <p className="text-sm font-medium text-slate-500">Include a past role to strengthen your portfolio.</p>
                 </div>
 
-                <form action={async (formData) => {
-                    "use server"
-                    await createExperience(formData)
-                }}>
+                <form 
+                    key={searchParams?.success ? Date.now() : 'experience-form'}
+                    action={async (formData) => {
+                        "use server"
+                        await createExperience(formData)
+                    }}
+                >
                     <div className="space-y-8">
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">

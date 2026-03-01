@@ -115,10 +115,13 @@ export default async function DashboardProjectsPage({
                     <p className="text-sm font-medium text-slate-500">Provide details about what you built and the technologies used.</p>
                 </div>
 
-                <form action={async (formData) => {
-                    "use server"
-                    await createProject(formData)
-                }}>
+                <form 
+                    key={searchParams?.success ? Date.now() : 'project-form'}
+                    action={async (formData) => {
+                        "use server"
+                        await createProject(formData)
+                    }}
+                >
                     <div className="space-y-8">
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
