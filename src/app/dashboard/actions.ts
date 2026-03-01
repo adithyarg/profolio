@@ -15,23 +15,39 @@ export async function updateProfile(formData: FormData) {
     // Handle avatar upload
     let avatar_url = (formData.get("current_avatar_url") as string) || ""
     const file = formData.get("avatar") as File
-    if (file && file.size > 0) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}.${fileExt}`
-        const filePath = `${user.id}/${fileName}`
+    
+    console.log("[Avatar] File received:", file?.name, "size:", file?.size, "type:", file?.type)
+    
+    if (file && file.size > 0 && file.name !== "undefined") {
+        try {
+            // Convert file to ArrayBuffer for Supabase
+            const arrayBuffer = await file.arrayBuffer()
+            const fileExt = file.name.split('.').pop()
+            const fileName = `${user.id}-${Date.now()}.${fileExt}`
+            const filePath = fileName
 
-        console.log("[Avatar] Uploading to path:", filePath, "size:", file.size)
+            console.log("[Avatar] Uploading to path:", filePath, "size:", file.size)
 
-        const { error: uploadError } = await supabase.storage
-            .from('avatars')
-            .upload(filePath, file, { upsert: true })
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(filePath, arrayBuffer, {
+                    contentType: file.type,
+                    upsert: true
+                })
 
-        if (!uploadError) {
-            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
-            avatar_url = data.publicUrl
-            console.log("[Avatar] Uploaded successfully:", avatar_url)
-        } else {
-            console.error("[Avatar Upload Error]", uploadError.message, uploadError)
+            if (uploadError) {
+                console.error("[Avatar Upload Error]", uploadError.message, uploadError)
+                redirect("/dashboard?error=" + encodeURIComponent(`Avatar upload failed: ${uploadError.message}`))
+            }
+
+            if (uploadData) {
+                const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
+                avatar_url = data.publicUrl
+                console.log("[Avatar] Uploaded successfully:", avatar_url)
+            }
+        } catch (err) {
+            console.error("[Avatar] Exception:", err)
+            redirect("/dashboard?error=" + encodeURIComponent("Failed to process avatar image"))
         }
     }
 

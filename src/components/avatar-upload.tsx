@@ -68,9 +68,6 @@ export function AvatarUpload({ currentAvatarUrl }: AvatarUploadProps) {
                 <p className="text-[11px] font-medium text-slate-400">
                     Click the photo or use the button above. PNG/JPG/WebP. Max 5 MB.
                 </p>
-                <p className="text-[11px] font-medium text-amber-600">
-                    ⚠️ Make sure the <strong>avatars</strong> bucket exists in Supabase Storage and is set to <strong>Public</strong>.
-                </p>
             </div>
         </div>
     )
