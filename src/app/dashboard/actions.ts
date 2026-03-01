@@ -2,63 +2,73 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function updateProfile(formData: FormData) {
     const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (!user) {
-        throw new Error("Unauthorized")
+    if (authError || !user) {
+        redirect("/login")
     }
 
-    let avatar_url = formData.get("current_avatar_url") as string || ""
+    // Handle avatar upload
+    let avatar_url = (formData.get("current_avatar_url") as string) || ""
     const file = formData.get("avatar") as File
     if (file && file.size > 0) {
         const fileExt = file.name.split('.').pop()
-        const fileName = `${Math.random()}.${fileExt}`
+        const fileName = `${Date.now()}.${fileExt}`
         const filePath = `${user.id}/${fileName}`
+
+        console.log("[Avatar] Uploading to path:", filePath, "size:", file.size)
 
         const { error: uploadError } = await supabase.storage
             .from('avatars')
-            .upload(filePath, file)
+            .upload(filePath, file, { upsert: true })
 
         if (!uploadError) {
             const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
             avatar_url = data.publicUrl
+            console.log("[Avatar] Uploaded successfully:", avatar_url)
+        } else {
+            console.error("[Avatar Upload Error]", uploadError.message, uploadError)
         }
     }
 
-    const newUsername = formData.get("username") as string
+    // Normalize username to lowercase and trim
+    const rawUsername = (formData.get("username") as string || "").trim().toLowerCase()
 
-    // Basic custom validation for username format (lowercase no spaces)
-    if (newUsername && !/^[a-z0-9_]+$/.test(newUsername)) {
-        return { error: "Username can only contain lowercase letters, numbers, and underscores." }
+    if (rawUsername && !/^[a-z0-9_]+$/.test(rawUsername)) {
+        redirect("/dashboard?error=" + encodeURIComponent("Username can only contain lowercase letters, numbers, and underscores."))
     }
 
     const updates = {
         id: user.id,
-        username: newUsername || null,
-        full_name: formData.get("full_name") as string,
-        headline: formData.get("headline") as string,
-        location: formData.get("location") as string,
-        bio: formData.get("bio") as string,
+        username: rawUsername || null,
+        full_name: (formData.get("full_name") as string || "").trim(),
+        headline: (formData.get("headline") as string || "").trim(),
+        location: (formData.get("location") as string || "").trim(),
+        bio: (formData.get("bio") as string || "").trim(),
         avatar_url: avatar_url || null,
         updated_at: new Date().toISOString(),
     }
+
+    console.log("[updateProfile] Saving:", { ...updates, avatar_url: avatar_url?.slice(0, 60) })
 
     const { error } = await supabase
         .from("profiles")
         .upsert(updates)
 
     if (error) {
-        // Handle unique constraint violation on username
+        console.error("[updateProfile] DB error:", error)
         if (error.code === '23505' && error.message.includes('username')) {
-            return { error: "This username is already taken. Please choose another." }
+            redirect("/dashboard?error=" + encodeURIComponent("This username is already taken."))
         }
-        return { error: error.message }
+        redirect("/dashboard?error=" + encodeURIComponent(error.message))
     }
 
     revalidatePath("/dashboard")
-    revalidatePath(`/${newUsername || user.id}`)
-    return { success: true }
+    revalidatePath(`/${rawUsername || user.id}`)
+    redirect("/dashboard?success=1")
 }
+

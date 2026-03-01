@@ -3,37 +3,53 @@ import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail } from "lucide-react"
+import Image from "next/image"
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
     const supabase = createClient()
-    const { data: user } = await supabase
-        .from("users")
-        .select("id")
-        .eq("username", params.username)
-        .single()
 
-    if (!user) return { title: "Not Found" }
-
-    const { data: profile } = await supabase
+    let { data: profile } = await supabase
         .from("profiles")
         .select("full_name, headline")
-        .eq("id", user.id)
-        .single()
+        .eq("username", params.username)
+        .maybeSingle()
+
+    if (!profile) {
+        const { data: profileById } = await supabase
+            .from("profiles")
+            .select("full_name, headline")
+            .eq("id", params.username)
+            .maybeSingle()
+        profile = profileById
+    }
+
+    if (!profile) return { title: "Portfolio Not Found" }
 
     return {
-        title: `${profile?.full_name} | ${profile?.headline}`,
-        description: profile?.headline,
+        title: `${profile.full_name} | ${profile.headline}`,
+        description: profile.headline,
     }
 }
 
 export default async function PortfolioPage({ params }: { params: { username: string } }) {
     const supabase = createClient()
 
-    const { data: profile } = await supabase
+    // First try to find by username (the pretty URL slug)
+    let { data: profile } = await supabase
         .from("profiles")
-        .select("*, auth_user_id:id")
-        .eq("id", params.username)
+        .select("*")
+        .eq("username", params.username)
         .maybeSingle()
+
+    // Fallback: maybe it's a UUID (old-style links)
+    if (!profile) {
+        const { data: profileById } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", params.username)
+            .maybeSingle()
+        profile = profileById
+    }
 
     if (!profile) return notFound()
 
@@ -81,6 +97,19 @@ export default async function PortfolioPage({ params }: { params: { username: st
                 {/* Hero Section */}
                 <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-16 md:pb-24 border-b border-slate-200">
                     <div className="max-w-4xl space-y-6">
+                        {/* Avatar */}
+                        {profile.avatar_url && (
+                            <div className="h-20 w-20 md:h-24 md:w-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg shrink-0 mb-6">
+                                <Image
+                                    src={profile.avatar_url}
+                                    alt={profile.full_name || "Avatar"}
+                                    width={96}
+                                    height={96}
+                                    className="w-full h-full object-cover"
+                                    unoptimized
+                                />
+                            </div>
+                        )}
                         <h1 className="text-[2.5rem] leading-[1.1] md:text-[4rem] font-extrabold tracking-tight text-slate-900">
                             {profile.full_name || "Professional"}
                         </h1>

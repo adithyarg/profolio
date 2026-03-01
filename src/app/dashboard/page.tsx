@@ -4,10 +4,14 @@ import { SubmitButton } from "@/components/submit-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ExternalLink, Eye, User as UserIcon } from "lucide-react"
-import Image from "next/image"
+import { ExternalLink, Eye, CheckCircle2, AlertCircle } from "lucide-react"
+import { AvatarUpload } from "@/components/avatar-upload"
 
-export default async function DashboardProfilePage() {
+export default async function DashboardProfilePage({
+    searchParams
+}: {
+    searchParams: { success?: string; error?: string }
+}) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -27,6 +31,20 @@ export default async function DashboardProfilePage() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+            {/* Success / Error Banner */}
+            {searchParams?.success && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Profile saved successfully!
+                </div>
+            )}
+            {searchParams?.error && (
+                <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 px-5 py-4 text-sm font-semibold">
+                    <AlertCircle className="h-5 w-5 shrink-0" />
+                    {decodeURIComponent(searchParams.error)}
+                </div>
+            )}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-1">
                     <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
@@ -75,27 +93,15 @@ export default async function DashboardProfilePage() {
                     <p className="text-sm font-medium text-slate-500">Update your core details.</p>
                 </div>
 
-                <form action={async (formData) => {
-                    "use server"
-                    await updateProfile(formData)
-                }}>
+                <form
+                    action={async (formData) => {
+                        "use server"
+                        await updateProfile(formData)
+                    }}
+                    encType="multipart/form-data"
+                >
                     <div className="space-y-8">
-                        {/* Avatar Image Upload Section */}
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-slate-100">
-                            <div className="h-24 w-24 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center relative group">
-                                {profile?.avatar_url ? (
-                                    <Image src={profile.avatar_url} alt="Avatar" width={96} height={96} className="w-full h-full object-cover" unoptimized />
-                                ) : (
-                                    <UserIcon className="h-10 w-10 text-slate-300" />
-                                )}
-                            </div>
-                            <div className="space-y-2 flex-1">
-                                <Label htmlFor="avatar" className="text-sm font-bold text-slate-900">Profile Picture</Label>
-                                <Input type="hidden" name="current_avatar_url" value={profile?.avatar_url || ""} />
-                                <Input id="avatar" name="avatar" type="file" accept="image/*" className="h-11 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-600 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-indigo-600" />
-                                <p className="text-[11px] font-medium text-slate-400">Recommended: Square PNG/JPG. Requires &quot;avatars&quot; bucket in Supabase.</p>
-                            </div>
-                        </div>
+                        <AvatarUpload currentAvatarUrl={profile?.avatar_url} />
 
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
