@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { createProject, deleteProject } from "./actions"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -45,6 +46,7 @@ export default async function DashboardProjectsPage() {
                     </div>
                 ) : (
                     <div className="grid gap-6 sm:grid-cols-2">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {projects.map((project: any) => (
                             <div key={project.id} className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
                                 <form action={async () => {
@@ -139,9 +141,9 @@ export default async function DashboardProjectsPage() {
                         </div>
 
                         <div className="flex justify-end pt-4">
-                            <Button type="submit" className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
+                            <SubmitButton className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
                                 Add Project
-                            </Button>
+                            </SubmitButton>
                         </div>
                     </div>
                 </form>

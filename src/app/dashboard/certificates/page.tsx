@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Trash2, Award, FileText } from "lucide-react"
@@ -157,9 +158,9 @@ export default async function CertificatesPage() {
                         </div>
 
                         <div className="flex justify-end pt-4">
-                            <Button type="submit" className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
+                            <SubmitButton className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
                                 Upload Certificate
-                            </Button>
+                            </SubmitButton>
                         </div>
                     </div>
                 </form>

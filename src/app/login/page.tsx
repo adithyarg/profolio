@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { login } from "./actions"
 import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Lock } from "lucide-react"
@@ -70,9 +71,9 @@ export default function LoginPage({ searchParams }: { searchParams: { error?: st
                             </div>
                         </div>
 
-                        <Button type="submit" className="w-full h-12 text-base font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-600/20 hover:-translate-y-0.5 transition-all">
+                        <SubmitButton className="w-full h-12 text-base font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-600/20 hover:-translate-y-0.5 transition-all">
                             Sign in to Profolio
-                        </Button>
+                        </SubmitButton>
                     </form>
 
                     <div className="mt-8 text-center text-sm font-medium text-slate-600">

@@ -15,12 +15,24 @@ export async function signup(formData: FormData) {
         lastName: formData.get("lastName") as string,
     }
 
+    const rawUsername = data.username
+    if (!rawUsername || !/^[a-z0-9_]+$/.test(rawUsername)) {
+        redirect("/register?error=" + encodeURIComponent("Username must be lowercase letters, numbers, and underscores only."))
+    }
+    const username = rawUsername.toLowerCase()
+
+    // Check if username is taken
+    const { data: existingUser } = await supabase.from('profiles').select('id').eq('username', username).maybeSingle()
+    if (existingUser) {
+        redirect("/register?error=" + encodeURIComponent("This username is already taken."))
+    }
+
     const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
             data: {
-                username: data.username,
+                username: username,
                 full_name: `${data.firstName} ${data.lastName}`,
             }
         }

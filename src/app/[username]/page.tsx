@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail } from "lucide-react"
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
@@ -60,15 +61,18 @@ export default async function PortfolioPage({ params }: { params: { username: st
             <nav className="sticky top-0 z-50 w-full border-b border-slate-200/50 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 transition-all">
                 <div className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
                     <span className="font-bold tracking-tight text-slate-900">{profile.full_name}</span>
-                    <div className="hidden lg:flex gap-8 text-[13px] font-semibold tracking-wide uppercase text-slate-500">
-                        {profile.bio && <a href="#about" className="hover:text-indigo-600 transition-colors">About</a>}
-                        {experiences?.length > 0 && <a href="#experience" className="hover:text-indigo-600 transition-colors">Experience</a>}
-                        {projects?.length > 0 && <a href="#projects" className="hover:text-indigo-600 transition-colors">Projects</a>}
-                        {skills?.length > 0 && <a href="#skills" className="hover:text-indigo-600 transition-colors">Skills</a>}
+                    <div className="hidden lg:flex gap-8 text-[13px] font-semibold tracking-wide uppercase text-slate-500 dark:text-slate-400">
+                        {profile.bio && <a href="#about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>}
+                        {(experiences?.length ?? 0) > 0 && <a href="#experience" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Experience</a>}
+                        {(projects?.length ?? 0) > 0 && <a href="#projects" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Projects</a>}
+                        {(skills?.length ?? 0) > 0 && <a href="#skills" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Skills</a>}
                     </div>
-                    <Button asChild size="sm" className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 text-white shadow-md shadow-slate-900/10">
-                        <a href="#contact">Hire Me</a>
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <ThemeToggle />
+                        <Button asChild size="sm" className="rounded-full px-6 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 text-white shadow-md shadow-slate-900/10">
+                            <a href="#contact">Hire Me</a>
+                        </Button>
+                    </div>
                 </div>
             </nav>
 
@@ -202,7 +206,7 @@ export default async function PortfolioPage({ params }: { params: { username: st
                         )}
 
                         {/* Credentials Section */}
-                        {(certificates?.length > 0 || awards?.length > 0) && (
+                        {((certificates?.length ?? 0) > 0 || (awards?.length ?? 0) > 0) && (
                             <section className="space-y-10">
                                 <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
                                     <Award className="h-4 w-4 text-slate-300" /> Credentials & Honours
@@ -258,7 +262,7 @@ export default async function PortfolioPage({ params }: { params: { username: st
                             <Mail className="h-8 w-8 text-indigo-600 stroke-[1.5]" />
                         </div>
                         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                            Let's build something <br className="hidden md:block" /> meaningful together.
+                            Let&apos;s build something <br className="hidden md:block" /> meaningful together.
                         </h2>
                         <Button size="lg" className="rounded-full px-10 h-14 text-base font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xl shadow-slate-900/10 hover:-translate-y-1 transition-transform">
                             Get In Touch

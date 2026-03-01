@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/server"
 import { updateProfile } from "./actions"
+import { SubmitButton } from "@/components/submit-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ExternalLink, CheckCircle2 } from "lucide-react"
+import { ExternalLink, Eye, User as UserIcon } from "lucide-react"
+import Image from "next/image"
 
 export default async function DashboardProfilePage() {
     const supabase = createClient()
@@ -17,13 +19,32 @@ export default async function DashboardProfilePage() {
         .eq("id", user.id)
         .single()
 
+    // Fetch view count
+    const { count: viewCount } = await supabase
+        .from("portfolio_views")
+        .select("*", { count: 'exact', head: true })
+        .eq("profile_id", user.id)
+
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="space-y-1">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Profile</h1>
-                <p className="text-base font-medium text-slate-500">
-                    Manage your identity and what recruiters see on your public portfolio.
-                </p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+                    <p className="text-base font-medium text-slate-500">
+                        Manage your identity and what recruiters see on your public portfolio.
+                    </p>
+                </div>
+
+                {/* Mini Analytics Stat */}
+                <div className="bg-white border border-slate-200 shadow-sm rounded-2xl px-6 py-4 flex items-center gap-4 min-w-[200px]">
+                    <div className="h-10 w-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-indigo-600">
+                        <Eye className="h-5 w-5" />
+                    </div>
+                    <div>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Views</p>
+                        <p className="text-2xl font-extrabold text-slate-900">{viewCount || 0}</p>
+                    </div>
+                </div>
             </div>
 
             {/* Public Link Card */}
@@ -59,12 +80,30 @@ export default async function DashboardProfilePage() {
                     await updateProfile(formData)
                 }}>
                     <div className="space-y-8">
+                        {/* Avatar Image Upload Section */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-slate-100">
+                            <div className="h-24 w-24 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center relative group">
+                                {profile?.avatar_url ? (
+                                    <Image src={profile.avatar_url} alt="Avatar" width={96} height={96} className="w-full h-full object-cover" unoptimized />
+                                ) : (
+                                    <UserIcon className="h-10 w-10 text-slate-300" />
+                                )}
+                            </div>
+                            <div className="space-y-2 flex-1">
+                                <Label htmlFor="avatar" className="text-sm font-bold text-slate-900">Profile Picture</Label>
+                                <Input type="hidden" name="current_avatar_url" value={profile?.avatar_url || ""} />
+                                <Input id="avatar" name="avatar" type="file" accept="image/*" className="h-11 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium text-slate-600 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-indigo-600" />
+                                <p className="text-[11px] font-medium text-slate-400">Recommended: Square PNG/JPG. Requires &quot;avatars&quot; bucket in Supabase.</p>
+                            </div>
+                        </div>
+
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <Label htmlFor="full_name" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Full Name</Label>
                                 <Input
                                     id="full_name"
                                     name="full_name"
+                                    required
                                     defaultValue={profile?.full_name || ""}
                                     placeholder="e.g. Alex Robinson"
                                     className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
@@ -73,6 +112,31 @@ export default async function DashboardProfilePage() {
                             </div>
 
                             <div className="space-y-2">
+                                <Label htmlFor="username" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Username</Label>
+                                <Input
+                                    id="username"
+                                    name="username"
+                                    required
+                                    defaultValue={profile?.username || ""}
+                                    placeholder="e.g. alexrobinson"
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                />
+                                <p className="text-[11px] font-medium text-slate-400">Used for your public URL. Lowercase, letters and numbers.</p>
+                            </div>
+
+                            <div className="space-y-2 sm:col-span-2">
+                                <Label htmlFor="headline" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Headline</Label>
+                                <Input
+                                    id="headline"
+                                    name="headline"
+                                    defaultValue={profile?.headline || ""}
+                                    placeholder="e.g. Senior Product Designer building accessible tools"
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                />
+                                <p className="text-[11px] font-medium text-slate-400">Keep it short, impactful, and specific to your role.</p>
+                            </div>
+
+                            <div className="space-y-2 sm:col-span-2">
                                 <Label htmlFor="location" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Location</Label>
                                 <Input
                                     id="location"
@@ -82,18 +146,6 @@ export default async function DashboardProfilePage() {
                                     className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
                                 />
                             </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="headline" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Headline</Label>
-                            <Input
-                                id="headline"
-                                name="headline"
-                                defaultValue={profile?.headline || ""}
-                                placeholder="e.g. Senior Product Designer building accessible tools"
-                                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
-                            />
-                            <p className="text-[11px] font-medium text-slate-400">Keep it short, impactful, and specific to your role.</p>
                         </div>
 
                         <div className="space-y-2 border-t pt-8">
@@ -110,12 +162,9 @@ export default async function DashboardProfilePage() {
                         </div>
 
                         <div className="flex items-center justify-end gap-4 border-t pt-8">
-                            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 opacity-0 animate-in fade-in duration-1000 fill-mode-forwards delay-500 hidden peer-checked:flex">
-                                <CheckCircle2 className="h-4 w-4" /> Saved just now
-                            </div>
-                            <Button type="submit" className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                            <SubmitButton className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold">
                                 Save Profile Changes
-                            </Button>
+                            </SubmitButton>
                         </div>
                     </div>
                 </form>
