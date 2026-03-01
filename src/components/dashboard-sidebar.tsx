@@ -35,7 +35,7 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
     return (
         <aside className="w-full md:w-[260px] md:shrink-0 border-r border-slate-200 bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
             <div className="p-6">
-                <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900 mb-10">
+                <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900 mb-10">
                     <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <span className="text-white font-extrabold text-sm">P</span>
                     </div>

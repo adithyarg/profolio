@@ -29,9 +29,21 @@ export async function updateSession(request: NextRequest) {
 
     const { data: { user } } = await supabase.auth.getUser()
 
+    // Redirect unauthenticated users trying to access dashboard
     if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'
+        return NextResponse.redirect(url)
+    }
+
+    // Redirect authenticated users away from auth pages and landing page
+    if (user && (
+        request.nextUrl.pathname === '/' ||
+        request.nextUrl.pathname === '/login' ||
+        request.nextUrl.pathname === '/register'
+    )) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
         return NextResponse.redirect(url)
     }
 
