@@ -136,6 +136,117 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Why Choose Section */}
+        <section className="py-24 bg-slate-50">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">Why professionals choose Profolio</h2>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">Stand out from the crowd with a portfolio that showcases your work, not just lists it.</p>
+            </div>
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle2 className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Recruiter-Friendly Format</h3>
+                    <p className="text-slate-600 leading-relaxed">Your portfolio is optimized for how recruiters actually review candidates. Clean layout, easy navigation, and all the information they need at their fingertips.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">No Design Skills Required</h3>
+                    <p className="text-slate-600 leading-relaxed">Focus on your content, not design. Our platform automatically creates a beautiful, professional portfolio that adapts to your information.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Instant Updates</h3>
+                    <p className="text-slate-600 leading-relaxed">Landed a new project? Got certified? Update your portfolio in seconds and share the same link. No need to regenerate or resend anything.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Globe className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Perfect for All Devices</h3>
+                    <p className="text-slate-600 leading-relaxed">Whether viewed on a phone during a commute or a desktop in an office, your portfolio looks pixel-perfect everywhere.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">Frequently Asked Questions</h2>
+              <p className="text-lg text-slate-600">Everything you need to know about Profolio</p>
+            </div>
+            <div className="space-y-8">
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">How is Profolio different from a PDF resume?</h3>
+                <p className="text-slate-600 leading-relaxed">Unlike static PDFs, Profolio creates a dynamic, interactive portfolio that's always up-to-date. Recruiters can easily navigate through your experience, view your projects with live links, and access everything from a single shareable URL. Plus, you never have to worry about formatting issues or outdated information.</p>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">How long does it take to create my portfolio?</h3>
+                <p className="text-slate-600 leading-relaxed">Most users have a complete portfolio ready in under 10 minutes. Simply fill in your information through our intuitive dashboard, and your professional portfolio is instantly live. You can always come back to add more details or update existing information.</p>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">Can I customize how my portfolio looks?</h3>
+                <p className="text-slate-600 leading-relaxed">Your portfolio follows a clean, professional design that's proven to work with recruiters. While the layout is standardized for optimal readability, you have full control over your content, including your bio, projects, skills, and achievements.</p>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">Is my information secure?</h3>
+                <p className="text-slate-600 leading-relaxed">Absolutely. We use industry-standard security practices to protect your data. Your information is stored securely, and you maintain full control over what's displayed publicly on your portfolio. We never share your data with third parties.</p>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">Can I use Profolio for different industries?</h3>
+                <p className="text-slate-600 leading-relaxed">Yes! Profolio works for any profession - from software engineers and designers to marketers, consultants, and beyond. The flexible structure adapts to showcase your unique experience and achievements, regardless of your field.</p>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-slate-900">What if I don't have much experience yet?</h3>
+                <p className="text-slate-600 leading-relaxed">Profolio is perfect for professionals at any career stage. Whether you're a student with academic projects, a career changer highlighting transferable skills, or a seasoned professional, our platform helps you present your experience in the best possible light.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-24 bg-gradient-to-br from-indigo-600 to-indigo-700 relative overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+          <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
+            <h2 className="text-4xl font-bold tracking-tight text-white mb-6">Ready to stand out?</h2>
+            <p className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">Join professionals who've ditched the PDF resume for something better. Create your portfolio in minutes.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="h-14 px-8 text-base bg-white text-indigo-600 hover:bg-slate-50 rounded-full shadow-xl hover:-translate-y-0.5 transition-all">
+                <Link href="/register">
+                  Get Started Free
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-14 px-8 text-base rounded-full border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm">
+                <Link href="/adithyarg">View Example Portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* Footer */}
