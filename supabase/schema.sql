@@ -12,6 +12,11 @@ create table public.profiles (
   bio text,
   location text,
   avatar_url text,
+  phone text,
+  email text,
+  linkedin_url text,
+  github_url text,
+  website_url text,
   social_links jsonb default '{}'::jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null

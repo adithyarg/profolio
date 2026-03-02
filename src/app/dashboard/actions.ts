@@ -65,6 +65,11 @@ export async function updateProfile(formData: FormData) {
         headline: (formData.get("headline") as string || "").trim(),
         location: (formData.get("location") as string || "").trim(),
         bio: (formData.get("bio") as string || "").trim(),
+        phone: (formData.get("phone") as string || "").trim() || null,
+        email: (formData.get("email") as string || "").trim() || null,
+        linkedin_url: (formData.get("linkedin_url") as string || "").trim() || null,
+        github_url: (formData.get("github_url") as string || "").trim() || null,
+        website_url: (formData.get("website_url") as string || "").trim() || null,
         avatar_url: avatar_url || null,
         updated_at: new Date().toISOString(),
     }

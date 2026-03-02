@@ -154,17 +154,84 @@ export default async function DashboardProfilePage({
                             </div>
                         </div>
 
+                        {/* Contact Information Section */}
+                        <div className="border-t pt-8">
+                            <h3 className="text-lg font-bold text-slate-900 mb-6">Contact Information</h3>
+                            <div className="grid sm:grid-cols-2 gap-8">
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Phone Number</Label>
+                                    <Input
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        defaultValue={profile?.phone || ""}
+                                        placeholder="e.g. +91 98765 43210"
+                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        defaultValue={profile?.email || user.email || ""}
+                                        placeholder="e.g. your.name@email.com"
+                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    />
+                                    <p className="text-[11px] font-medium text-slate-400">Defaults to your login email</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="linkedin_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">LinkedIn Profile</Label>
+                                    <Input
+                                        id="linkedin_url"
+                                        name="linkedin_url"
+                                        type="url"
+                                        defaultValue={profile?.linkedin_url || ""}
+                                        placeholder="https://linkedin.com/in/yourname"
+                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="github_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">GitHub Profile</Label>
+                                    <Input
+                                        id="github_url"
+                                        name="github_url"
+                                        type="url"
+                                        defaultValue={profile?.github_url || ""}
+                                        placeholder="https://github.com/yourname"
+                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    />
+                                </div>
+
+                                <div className="space-y-2 sm:col-span-2">
+                                    <Label htmlFor="website_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Personal Website / Portfolio</Label>
+                                    <Input
+                                        id="website_url"
+                                        name="website_url"
+                                        type="url"
+                                        defaultValue={profile?.website_url || ""}
+                                        placeholder="https://yourwebsite.com"
+                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="space-y-2 border-t pt-8">
-                            <Label htmlFor="bio" className="text-xs font-semibold uppercase tracking-wider text-slate-500">About Section (Bio)</Label>
+                            <Label htmlFor="bio" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Summary</Label>
                             <textarea
                                 id="bio"
                                 name="bio"
                                 defaultValue={profile?.bio || ""}
                                 rows={6}
                                 className="flex w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600 font-medium resize-y"
-                                placeholder="Tell your professional story..."
+                                placeholder="Write 3-4 lines about your expertise, what you build, and your career focus. Example: 'VLSI enthusiast with hands-on experience in Verilog and FPGA design. Built hardware accelerators and CNN pipelines. Focused on RTL design and verification roles.'"
                             />
-                            <p className="text-[11px] font-medium text-slate-400">Write 2-3 short paragraphs explaining your journey, current focus, and what drives you.</p>
+                            <p className="text-[11px] font-medium text-slate-400">Keep it concise (3-4 lines). Focus on your field, core skills, and what you build.</p>
                         </div>
 
                         <div className="flex items-center justify-end gap-4 border-t pt-8">
