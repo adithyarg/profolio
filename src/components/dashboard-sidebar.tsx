@@ -22,6 +22,7 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
         { name: "Profile", href: "/dashboard", icon: User },
         { name: "Projects", href: "/dashboard/projects", icon: FolderGit2 },
         { name: "Experience", href: "/dashboard/experience", icon: Briefcase },
+        { name: "Education", href: "/dashboard/education", icon: GraduationCap },
         { name: "Certificates", href: "/dashboard/certificates", icon: Award },
         { name: "Awards", href: "/dashboard/awards", icon: GraduationCap },
         { name: "Skills", href: "/dashboard/skills", icon: Blocks },

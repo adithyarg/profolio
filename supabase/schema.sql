@@ -71,6 +71,21 @@ create table public.awards (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Table: education
+create table public.education (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references public.profiles(id) on delete cascade not null,
+  degree text not null,
+  institution text not null,
+  field_of_study text,
+  start_date text,
+  end_date text,
+  grade text,
+  location text,
+  description text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
 -- Table: skills
 create table public.skills (
   id uuid primary key default uuid_generate_v4(),
@@ -95,6 +110,7 @@ alter table public.projects enable row level security;
 alter table public.experiences enable row level security;
 alter table public.certificates enable row level security;
 alter table public.awards enable row level security;
+alter table public.education enable row level security;
 alter table public.skills enable row level security;
 alter table public.portfolio_views enable row level security;
 
@@ -126,6 +142,12 @@ create policy "Awards are viewable by everyone." on public.awards for select usi
 create policy "Users can insert own awards." on public.awards for insert with check (auth.uid() = user_id);
 create policy "Users can update own awards." on public.awards for update using (auth.uid() = user_id);
 create policy "Users can delete own awards." on public.awards for delete using (auth.uid() = user_id);
+
+-- Education: Public can read, owners can write
+create policy "Education is viewable by everyone." on public.education for select using (true);
+create policy "Users can insert own education." on public.education for insert with check (auth.uid() = user_id);
+create policy "Users can update own education." on public.education for update using (auth.uid() = user_id);
+create policy "Users can delete own education." on public.education for delete using (auth.uid() = user_id);
 
 -- Skills: Public can read, owners can write
 create policy "Skills are viewable by everyone." on public.skills for select using (true);
