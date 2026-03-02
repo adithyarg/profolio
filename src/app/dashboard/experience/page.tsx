@@ -95,10 +95,10 @@ export default async function ExperiencePage({
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {experiences.map((exp: any) => (
                             <div key={exp.id} className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
-                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                     <a 
                                         href={`/dashboard/experience?edit=${exp.id}#form`}
-                                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors bg-white border border-slate-200"
                                         title="Edit experience"
                                     >
                                         <Pencil className="h-4 w-4" />
@@ -111,10 +111,10 @@ export default async function ExperiencePage({
                                     </form>
                                 </div>
 
-                                <div className="space-y-2 pr-10">
+                                <div className="space-y-2 pr-20">
                                     <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-1">
                                         <h3 className="text-xl font-bold text-slate-900">{exp.role}</h3>
-                                        <span className="text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-md w-fit">
+                                        <span className="text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-md w-fit mt-2 sm:mt-0">
                                             {exp.duration}
                                         </span>
                                     </div>
