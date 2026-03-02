@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail } from "lucide-react"
+import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail, Phone, Linkedin, Globe, GraduationCap } from "lucide-react"
 import Image from "next/image"
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
@@ -61,13 +61,15 @@ export default async function PortfolioPage({ params }: { params: { username: st
         { data: experiences },
         { data: skills },
         { data: certificates },
-        { data: awards }
+        { data: awards },
+        { data: education }
     ] = await Promise.all([
         supabase.from("projects").select("*").eq("user_id", profile.id).order("created_at", { ascending: false }),
         supabase.from("experiences").select("*").eq("user_id", profile.id).order("created_at", { ascending: false }),
         supabase.from("skills").select("*").eq("user_id", profile.id).order("level", { ascending: false }),
         supabase.from("certificates").select("*").eq("user_id", profile.id).order("created_at", { ascending: false }),
-        supabase.from("awards").select("*").eq("user_id", profile.id).order("created_at", { ascending: false })
+        supabase.from("awards").select("*").eq("user_id", profile.id).order("created_at", { ascending: false }),
+        supabase.from("education").select("*").eq("user_id", profile.id).order("created_at", { ascending: false })
     ])
 
     return (
@@ -116,10 +118,50 @@ export default async function PortfolioPage({ params }: { params: { username: st
                         <h2 className="text-xl md:text-3xl text-slate-500 font-medium leading-snug max-w-3xl">
                             {profile.headline || "Digital Portfolio"}
                         </h2>
-                        {profile.location && (
-                            <div className="inline-flex items-center text-sm font-semibold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm mt-4">
-                                <MapPin className="h-4 w-4 mr-2 text-indigo-500" />
-                                {profile.location}
+                        
+                        {/* Contact Information */}
+                        <div className="flex flex-wrap items-center gap-4 pt-4">
+                            {profile.location && (
+                                <div className="inline-flex items-center text-sm font-semibold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm">
+                                    <MapPin className="h-4 w-4 mr-2 text-indigo-500" />
+                                    {profile.location}
+                                </div>
+                            )}
+                            {profile.phone && (
+                                <div className="inline-flex items-center text-sm font-semibold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm">
+                                    <Phone className="h-4 w-4 mr-2 text-indigo-500" />
+                                    {profile.phone}
+                                </div>
+                            )}
+                            {profile.email && (
+                                <a href={`mailto:${profile.email}`} className="inline-flex items-center text-sm font-semibold text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm hover:border-indigo-300 hover:text-indigo-600 transition-colors">
+                                    <Mail className="h-4 w-4 mr-2 text-indigo-500" />
+                                    {profile.email}
+                                </a>
+                            )}
+                        </div>
+
+                        {/* Social Links */}
+                        {(profile.linkedin_url || profile.github_url || profile.website_url) && (
+                            <div className="flex flex-wrap items-center gap-3 pt-2">
+                                {profile.linkedin_url && (
+                                    <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                        <Linkedin className="h-4 w-4 mr-2" />
+                                        LinkedIn
+                                    </a>
+                                )}
+                                {profile.github_url && (
+                                    <a href={profile.github_url} target="_blank" rel="noreferrer" className="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                        <Github className="h-4 w-4 mr-2" />
+                                        GitHub
+                                    </a>
+                                )}
+                                {profile.website_url && (
+                                    <a href={profile.website_url} target="_blank" rel="noreferrer" className="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                        <Globe className="h-4 w-4 mr-2" />
+                                        Website
+                                    </a>
+                                )}
                             </div>
                         )}
                     </div>
@@ -131,10 +173,10 @@ export default async function PortfolioPage({ params }: { params: { username: st
                     {/* Left Column: Context & Skills (Sticky) */}
                     <div className="lg:col-span-4 relative">
                         <div className="lg:sticky lg:top-32 space-y-12">
-                            {/* About Section */}
+                            {/* Professional Summary Section */}
                             {profile.bio && (
                                 <section id="about" className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-                                    <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 mb-6">About</h3>
+                                    <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 mb-6">Professional Summary</h3>
                                     <p className="leading-relaxed text-slate-700 font-medium text-base whitespace-pre-wrap">
                                         {profile.bio}
                                     </p>
@@ -180,9 +222,55 @@ export default async function PortfolioPage({ params }: { params: { username: st
                                                 </span>
                                             </div>
                                             <div className="text-indigo-600 font-semibold mb-4">{exp.company}</div>
-                                            <p className="text-slate-600 leading-relaxed font-medium">
+                                            <p className="text-slate-600 leading-relaxed font-medium whitespace-pre-wrap">
                                                 {exp.description}
                                             </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Education Section */}
+                        {education && education.length > 0 && (
+                            <section id="education" className="space-y-10">
+                                <h3 className="text-[13px] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
+                                    <GraduationCap className="h-4 w-4 text-slate-300" /> Education
+                                </h3>
+                                <div className="space-y-6">
+                                    {education.map((edu: any) => (
+                                        <div key={edu.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
+                                            <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3 gap-2">
+                                                <div className="flex-1">
+                                                    <h4 className="text-xl font-bold text-slate-900">{edu.degree}</h4>
+                                                    {edu.field_of_study && (
+                                                        <p className="text-sm font-semibold text-indigo-600 mt-1">{edu.field_of_study}</p>
+                                                    )}
+                                                </div>
+                                                {edu.grade && (
+                                                    <span className="text-sm font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-md border border-emerald-200">
+                                                        {edu.grade}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="text-base font-bold text-slate-700 mb-2">{edu.institution}</div>
+                                            <div className="flex flex-wrap items-center gap-3 text-sm">
+                                                {(edu.start_date || edu.end_date) && (
+                                                    <span className="font-semibold text-slate-500">
+                                                        {edu.start_date && edu.end_date ? `${edu.start_date} - ${edu.end_date}` : edu.start_date || edu.end_date}
+                                                    </span>
+                                                )}
+                                                {edu.location && (
+                                                    <span className="font-medium text-slate-500">
+                                                        • {edu.location}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {edu.description && (
+                                                <p className="text-sm font-medium text-slate-600 leading-relaxed pt-3 mt-3 border-t border-slate-100">
+                                                    {edu.description}
+                                                </p>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
