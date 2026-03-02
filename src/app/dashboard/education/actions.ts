@@ -9,6 +9,9 @@ export async function createEducation(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("Unauthorized")
 
+    const id = formData.get("id") as string | null
+    const isUpdate = !!id
+
     // Build date strings from dropdowns
     const startMonth = formData.get("start_month") as string
     const startYear = formData.get("start_year") as string
@@ -40,13 +43,26 @@ export async function createEducation(formData: FormData) {
         description: (formData.get("description") as string) || null,
     }
 
-    const { error } = await supabase.from("education").insert([education])
+    let error
+
+    if (isUpdate) {
+        const result = await supabase
+            .from("education")
+            .update(education)
+            .eq("id", id)
+            .eq("user_id", user.id)
+        error = result.error
+    } else {
+        const result = await supabase.from("education").insert([education])
+        error = result.error
+    }
+
     if (error) {
         redirect("/dashboard/education?error=" + encodeURIComponent(error.message))
     }
 
     revalidatePath("/dashboard/education")
-    redirect("/dashboard/education?success=1")
+    redirect(isUpdate ? "/dashboard/education?updated=1" : "/dashboard/education?success=1")
 }
 
 export async function deleteEducation(id: string) {

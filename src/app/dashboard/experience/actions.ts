@@ -9,6 +9,9 @@ export async function createExperience(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("Unauthorized")
 
+    const id = formData.get("id") as string | null
+    const isUpdate = !!id
+
     // Build duration string from date dropdowns
     const startMonth = formData.get("start_month") as string
     const startYear = formData.get("start_year") as string
@@ -33,13 +36,26 @@ export async function createExperience(formData: FormData) {
         description: formData.get("description") as string,
     }
 
-    const { error } = await supabase.from("experiences").insert([experience])
+    let error
+
+    if (isUpdate) {
+        const result = await supabase
+            .from("experiences")
+            .update(experience)
+            .eq("id", id)
+            .eq("user_id", user.id)
+        error = result.error
+    } else {
+        const result = await supabase.from("experiences").insert([experience])
+        error = result.error
+    }
+
     if (error) {
         redirect("/dashboard/experience?error=" + encodeURIComponent(error.message))
     }
 
     revalidatePath("/dashboard/experience")
-    redirect("/dashboard/experience?success=1")
+    redirect(isUpdate ? "/dashboard/experience?updated=1" : "/dashboard/experience?success=1")
 }
 
 export async function deleteExperience(id: string) {
