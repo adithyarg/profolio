@@ -12,6 +12,9 @@ export async function createProject(formData: FormData) {
         throw new Error("Unauthorized")
     }
 
+    const id = formData.get("id") as string | null
+    const isUpdate = !!id
+
     const project = {
         user_id: user.id,
         title: formData.get("title") as string,
@@ -25,16 +28,30 @@ export async function createProject(formData: FormData) {
         tech_stack: formData.get("tech_stack") ? (formData.get("tech_stack") as string).split(",").map(t => t.trim()) : [],
     }
 
-    const { error } = await supabase
-        .from("projects")
-        .insert([project])
+    let error
+
+    if (isUpdate) {
+        // Update existing project
+        const result = await supabase
+            .from("projects")
+            .update(project)
+            .eq("id", id)
+            .eq("user_id", user.id)
+        error = result.error
+    } else {
+        // Create new project
+        const result = await supabase
+            .from("projects")
+            .insert([project])
+        error = result.error
+    }
 
     if (error) {
         redirect("/dashboard/projects?error=" + encodeURIComponent(error.message))
     }
 
     revalidatePath("/dashboard/projects")
-    redirect("/dashboard/projects?success=1")
+    redirect(isUpdate ? "/dashboard/projects?updated=1" : "/dashboard/projects?success=1")
 }
 
 export async function deleteProject(id: string) {

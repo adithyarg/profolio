@@ -5,13 +5,13 @@ import { SubmitButton } from "@/components/submit-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Github, ExternalLink, Trash2, FolderGit2, CheckCircle2, AlertCircle } from "lucide-react"
+import { Github, ExternalLink, Trash2, FolderGit2, CheckCircle2, AlertCircle, Pencil } from "lucide-react"
 import { DeleteButton } from "@/components/delete-button"
 
 export default async function DashboardProjectsPage({
     searchParams
 }: {
-    searchParams: { success?: string; error?: string; deleted?: string }
+    searchParams: { success?: string; error?: string; deleted?: string; edit?: string; updated?: string }
 }) {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -24,6 +24,11 @@ export default async function DashboardProjectsPage({
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
 
+    // Get project to edit if edit param exists
+    const editingProject = searchParams.edit 
+        ? projects?.find(p => p.id === searchParams.edit)
+        : null
+
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             
@@ -32,6 +37,12 @@ export default async function DashboardProjectsPage({
                 <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
                     <CheckCircle2 className="h-5 w-5 shrink-0" />
                     Project added successfully!
+                </div>
+            )}
+            {searchParams?.updated && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                    Project updated successfully!
                 </div>
             )}
             {searchParams?.deleted && (
@@ -75,12 +86,21 @@ export default async function DashboardProjectsPage({
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {projects.map((project: any) => (
                             <div key={project.id} className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all">
-                                <form action={async () => {
-                                    "use server"
-                                    await deleteProject(project.id)
-                                }} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <DeleteButton itemName="project" />
-                                </form>
+                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <a 
+                                        href={`/dashboard/projects?edit=${project.id}#form`}
+                                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                        title="Edit project"
+                                    >
+                                        <Pencil className="h-4 w-4" />
+                                    </a>
+                                    <form action={async () => {
+                                        "use server"
+                                        await deleteProject(project.id)
+                                    }}>
+                                        <DeleteButton itemName="project" />
+                                    </form>
+                                </div>
 
                                 <div className="space-y-3 pr-10">
                                     <h3 className="font-bold text-lg text-slate-900">{project.title}</h3>
@@ -113,36 +133,63 @@ export default async function DashboardProjectsPage({
                 )}
             </div>
 
-            {/* Add New Form */}
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
+            {/* Add/Edit Form */}
+            <div id="form" className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
                 <div className="space-y-1 mb-8">
-                    <h2 className="text-xl font-bold text-slate-900">Add New Project</h2>
+                    <h2 className="text-xl font-bold text-slate-900">
+                        {editingProject ? 'Edit Project' : 'Add New Project'}
+                    </h2>
                     <p className="text-sm font-medium text-slate-500">Provide details about what you built and the technologies used.</p>
+                    {editingProject && (
+                        <a href="/dashboard/projects" className="inline-block text-sm font-semibold text-indigo-600 hover:text-indigo-700 mt-2">
+                            ← Cancel editing
+                        </a>
+                    )}
                 </div>
 
                 <form 
-                    key={searchParams?.success ? Date.now() : 'project-form'}
+                    key={editingProject ? `edit-${editingProject.id}` : (searchParams?.success ? Date.now() : 'project-form')}
                     action={async (formData) => {
                         "use server"
                         await createProject(formData)
                     }}
                 >
+                    {editingProject && <input type="hidden" name="id" value={editingProject.id} />}
                     <div className="space-y-8">
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <Label htmlFor="title" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Project Title *</Label>
-                                <Input id="title" name="title" required placeholder="e.g. E-Commerce Platform" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <Input 
+                                    id="title" 
+                                    name="title" 
+                                    required 
+                                    defaultValue={editingProject?.title || ""}
+                                    placeholder="e.g. E-Commerce Platform" 
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" 
+                                />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="tech_stack" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Tech Stack</Label>
-                                <Input id="tech_stack" name="tech_stack" placeholder="React, Node.js, Postgres" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <Input 
+                                    id="tech_stack" 
+                                    name="tech_stack" 
+                                    defaultValue={editingProject?.tech_stack?.join(", ") || ""}
+                                    placeholder="React, Node.js, Postgres" 
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" 
+                                />
                                 <p className="text-[11px] font-medium text-slate-400">Comma separated</p>
                             </div>
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="short_description" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Short Description</Label>
-                            <Input id="short_description" name="short_description" placeholder="A brief 1-sentence summary" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                            <Input 
+                                id="short_description" 
+                                name="short_description" 
+                                defaultValue={editingProject?.short_description || ""}
+                                placeholder="A brief 1-sentence summary" 
+                                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" 
+                            />
                         </div>
 
                         <div className="space-y-2">
@@ -151,6 +198,7 @@ export default async function DashboardProjectsPage({
                                 id="description"
                                 name="description"
                                 rows={4}
+                                defaultValue={editingProject?.description || ""}
                                 className="flex w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600 font-medium resize-y"
                                 placeholder="Explain your role, the challenges faced, and the impact..."
                             />
@@ -159,17 +207,31 @@ export default async function DashboardProjectsPage({
                         <div className="grid sm:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
                             <div className="space-y-2">
                                 <Label htmlFor="github_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">GitHub Repository URL</Label>
-                                <Input id="github_url" name="github_url" type="url" placeholder="https://github.com/..." className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <Input 
+                                    id="github_url" 
+                                    name="github_url" 
+                                    type="url" 
+                                    defaultValue={editingProject?.github_url || ""}
+                                    placeholder="https://github.com/..." 
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" 
+                                />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="demo_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Demo URL</Label>
-                                <Input id="demo_url" name="demo_url" type="url" placeholder="https://your-app.com" className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" />
+                                <Input 
+                                    id="demo_url" 
+                                    name="demo_url" 
+                                    type="url" 
+                                    defaultValue={editingProject?.demo_url || ""}
+                                    placeholder="https://your-app.com" 
+                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium" 
+                                />
                             </div>
                         </div>
 
                         <div className="flex justify-end pt-4">
                             <SubmitButton className="h-11 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-600/20">
-                                Add Project
+                                {editingProject ? 'Update Project' : 'Add Project'}
                             </SubmitButton>
                         </div>
                     </div>
