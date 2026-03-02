@@ -11,7 +11,8 @@ import {
     GraduationCap,
     Blocks,
     LogOut,
-    ExternalLink
+    ExternalLink,
+    Sparkles
 } from "lucide-react"
 
 export function DashboardSidebar({ user, profile }: { user: any, profile: any }) {
@@ -34,28 +35,28 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
     }
 
     return (
-        <aside className="w-full md:w-[260px] md:shrink-0 border-r border-slate-200 bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
-            <div className="p-6">
-                <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900 mb-10">
-                    <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-extrabold text-sm">P</span>
+        <aside className="w-full md:w-[280px] md:shrink-0 border-r-2 border-slate-200 bg-gradient-to-b from-white to-slate-50/50 flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
+            <div className="p-8">
+                <Link href="/dashboard" className="flex items-center gap-3 font-bold text-2xl tracking-tight mb-12 transition-all duration-300 hover:scale-105">
+                    <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
+                        <span className="text-white font-extrabold text-lg">P</span>
                     </div>
-                    Profolio
+                    <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio</span>
                 </Link>
 
-                <nav className="space-y-1">
+                <nav className="space-y-2">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${isActive
-                                        ? "bg-indigo-50 text-indigo-700"
-                                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                                className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-base font-semibold transition-all duration-200 ${isActive
+                                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30"
+                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                                     }`}
                             >
-                                <item.icon className={`h-4 w-4 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
+                                <item.icon className={`h-5 w-5 ${isActive ? "text-white" : "text-slate-400"}`} />
                                 {item.name}
                             </Link>
                         )
@@ -63,17 +64,17 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
                 </nav>
             </div>
 
-            <div className="p-6 space-y-4 border-t border-slate-100 bg-slate-50/50 mt-auto">
-                <div className="mb-4 px-2">
-                    <p className="text-sm font-medium text-slate-900 truncate">{profile?.full_name || "User"}</p>
-                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+            <div className="p-6 space-y-4 border-t-2 border-slate-200 bg-gradient-to-b from-slate-50 to-white mt-auto">
+                <div className="mb-4 px-3 py-2 bg-white rounded-2xl border-2 border-slate-200">
+                    <p className="text-sm font-bold text-slate-900 truncate">{profile?.full_name || "User"}</p>
+                    <p className="text-xs font-semibold text-slate-500 truncate">{user.email}</p>
                 </div>
 
                 <a
                     href={`/${profile?.username || user.id}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-white px-3 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-50 transition-colors"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 px-4 py-3 text-sm font-bold text-indigo-700 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300"
                 >
                     <ExternalLink className="h-4 w-4" />
                     View Portfolio
@@ -81,7 +82,7 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
 
                 <button
                     onClick={handleLogout}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all duration-200"
                 >
                     <LogOut className="h-4 w-4" />
                     Sign Out

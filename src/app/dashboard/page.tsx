@@ -34,63 +34,64 @@ export default async function DashboardProfilePage({
 
             {/* Success / Error Banner */}
             {searchParams?.success && (
-                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 text-sm font-semibold">
-                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                <div className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-emerald-100/50 border-2 border-emerald-200 text-emerald-700 px-6 py-5 text-base font-bold shadow-lg">
+                    <CheckCircle2 className="h-6 w-6 shrink-0" />
                     Profile saved successfully!
                 </div>
             )}
             {searchParams?.error && (
-                <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 text-red-700 px-5 py-4 text-sm font-semibold">
-                    <AlertCircle className="h-5 w-5 shrink-0" />
+                <div className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-red-50 to-red-100/50 border-2 border-red-200 text-red-700 px-6 py-5 text-base font-bold shadow-lg">
+                    <AlertCircle className="h-6 w-6 shrink-0" />
                     {decodeURIComponent(searchParams.error)}
                 </div>
             )}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="space-y-1">
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
-                    <p className="text-base font-medium text-slate-500">
-                        Manage your identity and what recruiters see on your public portfolio.
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div className="space-y-2">
+                    <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Dashboard</h1>
+                    <p className="text-lg font-semibold text-slate-600">
+                        Manage your identity and what recruiters see on your portfolio
                     </p>
                 </div>
 
                 {/* Mini Analytics Stat */}
-                <div className="bg-white border border-slate-200 shadow-sm rounded-2xl px-6 py-4 flex items-center gap-4 min-w-[200px]">
-                    <div className="h-10 w-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-indigo-600">
-                        <Eye className="h-5 w-5" />
+                <div className="bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 shadow-xl rounded-3xl px-8 py-6 flex items-center gap-5 min-w-[240px] hover:scale-105 transition-transform duration-300">
+                    <div className="h-14 w-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                        <Eye className="h-7 w-7" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Views</p>
-                        <p className="text-2xl font-extrabold text-slate-900">{viewCount || 0}</p>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Views</p>
+                        <p className="text-3xl font-black text-slate-900">{viewCount || 0}</p>
                     </div>
                 </div>
             </div>
 
             {/* Public Link Card */}
-            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/5 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
-                <div className="space-y-2 relative z-10">
-                    <h2 className="text-lg font-bold text-indigo-900">Your Portfolio Link</h2>
-                    <p className="text-sm font-medium text-indigo-700/80 max-w-lg">
+            <div className="rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-50 p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 relative overflow-hidden shadow-xl">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
+                <div className="space-y-3 relative z-10">
+                    <h2 className="text-2xl font-black text-indigo-900">Your Portfolio Link</h2>
+                    <p className="text-base font-semibold text-indigo-700/90 max-w-lg leading-relaxed">
                         Share this custom link with recruiters or on your social profiles. The page is completely read-only for visitors.
                     </p>
-                    <div className="pt-2">
-                        <code className="text-sm font-semibold text-indigo-800 bg-white/60 px-3 py-1.5 rounded-md border border-indigo-200/50 select-all">
+                    <div className="pt-3">
+                        <code className="text-base font-bold text-indigo-800 bg-white/80 backdrop-blur-sm px-5 py-3 rounded-2xl border-2 border-indigo-200 select-all inline-block">
                             profolio.vercel.app/{profile?.username || user.id}
                         </code>
                     </div>
                 </div>
-                <Button variant="default" className="relative z-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-600/20" asChild>
+                <Button variant="default" className="relative z-10 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-2xl shadow-xl shadow-indigo-600/30 hover:scale-105 transition-all duration-300 h-14 px-8 text-base font-bold" asChild>
                     <a href={`/${profile?.username || user.id}`} target="_blank" rel="noreferrer">
-                        Preview Profile <ExternalLink className="h-4 w-4 ml-2" />
+                        Preview Profile <ExternalLink className="h-5 w-5 ml-2" />
                     </a>
                 </Button>
             </div>
 
             {/* Form Card */}
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 sm:p-10">
-                <div className="space-y-1 mb-8">
-                    <h2 className="text-xl font-bold text-slate-900">Personal Information</h2>
-                    <p className="text-sm font-medium text-slate-500">Update your core details.</p>
+            <div className="rounded-3xl border-2 border-slate-200 bg-white shadow-2xl p-8 sm:p-12">
+                <div className="space-y-2 mb-10">
+                    <h2 className="text-3xl font-black text-slate-900">Personal Information</h2>
+                    <p className="text-base font-semibold text-slate-600">Update your core details and contact information</p>
                 </div>
 
                 <form
@@ -105,137 +106,137 @@ export default async function DashboardProfilePage({
 
                         <div className="grid sm:grid-cols-2 gap-8">
                             <div className="space-y-2">
-                                <Label htmlFor="full_name" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Full Name</Label>
+                                <Label htmlFor="full_name" className="text-sm font-bold text-slate-700">Full Name</Label>
                                 <Input
                                     id="full_name"
                                     name="full_name"
                                     required
                                     defaultValue={profile?.full_name || ""}
                                     placeholder="e.g. Alex Robinson"
-                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                 />
-                                <p className="text-[11px] font-medium text-slate-400">Displayed prominently at the top of your portfolio.</p>
+                                <p className="text-xs font-semibold text-slate-500">Displayed prominently at the top of your portfolio</p>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="username" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Username</Label>
+                                <Label htmlFor="username" className="text-sm font-bold text-slate-700">Username</Label>
                                 <Input
                                     id="username"
                                     name="username"
                                     required
                                     defaultValue={profile?.username || ""}
                                     placeholder="e.g. alexrobinson"
-                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                 />
-                                <p className="text-[11px] font-medium text-slate-400">Used for your public URL. Lowercase, letters and numbers.</p>
+                                <p className="text-xs font-semibold text-slate-500">Used for your public URL. Lowercase, letters and numbers</p>
                             </div>
 
                             <div className="space-y-2 sm:col-span-2">
-                                <Label htmlFor="headline" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Headline</Label>
+                                <Label htmlFor="headline" className="text-sm font-bold text-slate-700">Professional Headline</Label>
                                 <Input
                                     id="headline"
                                     name="headline"
                                     defaultValue={profile?.headline || ""}
                                     placeholder="e.g. Senior Product Designer building accessible tools"
-                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                 />
-                                <p className="text-[11px] font-medium text-slate-400">Keep it short, impactful, and specific to your role.</p>
+                                <p className="text-xs font-semibold text-slate-500">Keep it short, impactful, and specific to your role</p>
                             </div>
 
                             <div className="space-y-2 sm:col-span-2">
-                                <Label htmlFor="location" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Location</Label>
+                                <Label htmlFor="location" className="text-sm font-bold text-slate-700">Location</Label>
                                 <Input
                                     id="location"
                                     name="location"
                                     defaultValue={profile?.location || ""}
                                     placeholder="e.g. San Francisco, CA"
-                                    className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                    className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                 />
                             </div>
                         </div>
 
                         {/* Contact Information Section */}
-                        <div className="border-t pt-8">
-                            <h3 className="text-lg font-bold text-slate-900 mb-6">Contact Information</h3>
+                        <div className="border-t-2 border-slate-200 pt-10">
+                            <h3 className="text-2xl font-black text-slate-900 mb-8">Contact Information</h3>
                             <div className="grid sm:grid-cols-2 gap-8">
                                 <div className="space-y-2">
-                                    <Label htmlFor="phone" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Phone Number</Label>
+                                    <Label htmlFor="phone" className="text-sm font-bold text-slate-700">Phone Number</Label>
                                     <Input
                                         id="phone"
                                         name="phone"
                                         type="tel"
                                         defaultValue={profile?.phone || ""}
                                         placeholder="e.g. +91 98765 43210"
-                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                        className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Email</Label>
+                                    <Label htmlFor="email" className="text-sm font-bold text-slate-700">Professional Email</Label>
                                     <Input
                                         id="email"
                                         name="email"
                                         type="email"
                                         defaultValue={profile?.email || user.email || ""}
                                         placeholder="e.g. your.name@email.com"
-                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                        className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                     />
-                                    <p className="text-[11px] font-medium text-slate-400">Defaults to your login email</p>
+                                    <p className="text-xs font-semibold text-slate-500">Defaults to your login email</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="linkedin_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">LinkedIn Profile</Label>
+                                    <Label htmlFor="linkedin_url" className="text-sm font-bold text-slate-700">LinkedIn Profile</Label>
                                     <Input
                                         id="linkedin_url"
                                         name="linkedin_url"
                                         type="url"
                                         defaultValue={profile?.linkedin_url || ""}
                                         placeholder="https://linkedin.com/in/yourname"
-                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                        className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="github_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">GitHub Profile</Label>
+                                    <Label htmlFor="github_url" className="text-sm font-bold text-slate-700">GitHub Profile</Label>
                                     <Input
                                         id="github_url"
                                         name="github_url"
                                         type="url"
                                         defaultValue={profile?.github_url || ""}
                                         placeholder="https://github.com/yourname"
-                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                        className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2 sm:col-span-2">
-                                    <Label htmlFor="website_url" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Personal Website / Portfolio</Label>
+                                    <Label htmlFor="website_url" className="text-sm font-bold text-slate-700">Personal Website / Portfolio</Label>
                                     <Input
                                         id="website_url"
                                         name="website_url"
                                         type="url"
                                         defaultValue={profile?.website_url || ""}
                                         placeholder="https://yourwebsite.com"
-                                        className="h-12 rounded-xl border-slate-200 bg-slate-50/50 px-4 font-medium focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600"
+                                        className="h-14 rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 text-base font-medium focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 transition-all"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-2 border-t pt-8">
-                            <Label htmlFor="bio" className="text-xs font-semibold uppercase tracking-wider text-slate-500">Professional Summary</Label>
+                        <div className="space-y-2 border-t-2 border-slate-200 pt-10">
+                            <Label htmlFor="bio" className="text-sm font-bold text-slate-700">Professional Summary</Label>
                             <textarea
                                 id="bio"
                                 name="bio"
                                 defaultValue={profile?.bio || ""}
                                 rows={6}
-                                className="flex w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/10 focus-visible:border-indigo-600 font-medium resize-y"
+                                className="flex w-full rounded-2xl border-2 border-slate-200 bg-slate-50/50 px-5 py-4 text-base shadow-sm placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-600/20 focus-visible:border-indigo-600 font-medium resize-y transition-all"
                                 placeholder="Write 3-4 lines about your expertise, what you build, and your career focus. Example: 'VLSI enthusiast with hands-on experience in Verilog and FPGA design. Built hardware accelerators and CNN pipelines. Focused on RTL design and verification roles.'"
                             />
-                            <p className="text-[11px] font-medium text-slate-400">Keep it concise (3-4 lines). Focus on your field, core skills, and what you build.</p>
+                            <p className="text-xs font-semibold text-slate-500">Keep it concise (3-4 lines). Focus on your field, core skills, and what you build</p>
                         </div>
 
-                        <div className="flex items-center justify-end gap-4 border-t pt-8">
-                            <SubmitButton className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                        <div className="flex items-center justify-end gap-4 border-t-2 border-slate-200 pt-10">
+                            <SubmitButton className="h-14 px-10 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-base shadow-xl shadow-indigo-600/30 hover:scale-105 transition-all duration-300">
                                 Save Profile Changes
                             </SubmitButton>
                         </div>

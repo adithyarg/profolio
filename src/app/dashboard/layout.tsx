@@ -22,11 +22,15 @@ export default async function DashboardLayout({
         .single()
 
     return (
-        <div className="flex min-h-screen bg-slate-50/50 font-sans text-slate-900 selection:bg-indigo-500/30">
-            {/* Sidebar extracted to client component for active states ideally, but we can do it simply here or as a Server Component if Next.js handles it. Let's keep it clean. */}
+        <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 font-sans text-slate-900 selection:bg-indigo-500/30 relative overflow-hidden">
+            {/* Background decorative elements */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" aria-hidden="true"></div>
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none" aria-hidden="true"></div>
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" aria-hidden="true"></div>
+            
             <DashboardSidebar user={user} profile={profile} />
 
-            <main className="flex-1 p-6 md:p-12 lg:p-16 max-w-6xl mx-auto w-full">
+            <main className="flex-1 p-6 md:p-12 lg:p-16 max-w-7xl mx-auto w-full relative z-10">
                 {children}
             </main>
         </div>
