@@ -4,7 +4,7 @@ import { SubmitButton } from "@/components/submit-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ExternalLink, Eye, CheckCircle2, AlertCircle } from "lucide-react"
+import { ExternalLink, CheckCircle2, AlertCircle } from "lucide-react"
 import { AvatarUpload } from "@/components/avatar-upload"
 
 export default async function DashboardProfilePage({
@@ -23,12 +23,6 @@ export default async function DashboardProfilePage({
         .eq("id", user.id)
         .single()
 
-    // Fetch view count
-    const { count: viewCount } = await supabase
-        .from("portfolio_views")
-        .select("*", { count: 'exact', head: true })
-        .eq("profile_id", user.id)
-
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
@@ -45,24 +39,11 @@ export default async function DashboardProfilePage({
                     {decodeURIComponent(searchParams.error)}
                 </div>
             )}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                <div className="space-y-2">
-                    <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Dashboard</h1>
-                    <p className="text-lg font-semibold text-slate-600">
-                        Manage your identity and what recruiters see on your portfolio
-                    </p>
-                </div>
-
-                {/* Mini Analytics Stat */}
-                <div className="bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 shadow-xl rounded-3xl px-8 py-6 flex items-center gap-5 min-w-[240px] hover:scale-105 transition-transform duration-300">
-                    <div className="h-14 w-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-                        <Eye className="h-7 w-7" />
-                    </div>
-                    <div>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Views</p>
-                        <p className="text-3xl font-black text-slate-900">{viewCount || 0}</p>
-                    </div>
-                </div>
+            <div className="space-y-2">
+                <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Dashboard</h1>
+                <p className="text-lg font-semibold text-slate-600">
+                    Manage your identity and what recruiters see on your portfolio
+                </p>
             </div>
 
             {/* Public Link Card */}

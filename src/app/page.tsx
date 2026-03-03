@@ -330,9 +330,11 @@ export default function Home() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-16 px-12 text-lg rounded-2xl border-2 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold hover:scale-105 hover:border-white/50">
-                <Link href="/adithyarg" className="flex items-center gap-3">
-                  View Live Demo
-                  <ArrowRight className="h-5 w-5" />
+                <Link href="/adithyarg">
+                  <span className="flex items-center gap-3">
+                    View Live Demo
+                    <ArrowRight className="h-5 w-5" />
+                  </span>
                 </Link>
               </Button>
             </div>
