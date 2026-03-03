@@ -1,10 +1,14 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sparkles, Layout, Globe, ArrowRight, CheckCircle2, Zap, Shield, Rocket } from "lucide-react"
+import { FloatingElements } from "@/components/floating-elements"
+import { StatsSection } from "@/components/stats-section"
+import { Testimonials } from "@/components/testimonials"
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 font-sans selection:bg-indigo-500/30">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 font-sans selection:bg-indigo-500/30 relative overflow-hidden">
+      <FloatingElements />
 
       {/* Navigation */}
       <header className="px-6 lg:px-16 h-24 flex items-center justify-between border-b border-slate-200/60 bg-white/90 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
@@ -87,12 +91,12 @@ export default function Home() {
             </div>
 
             {/* Right Mockup Preview */}
-            <div className="relative z-10 hidden lg:block animate-in fade-in zoom-in-95 duration-1000 delay-150">
-              <div className="relative rounded-3xl bg-white border-2 border-slate-200 shadow-2xl p-8 hover:scale-105 transition-transform duration-500 hover:shadow-indigo-500/20">
+            <div className="relative z-10 hidden lg:block animate-in fade-in zoom-in-95 duration-1000 delay-150 perspective-1000">
+              <div className="relative rounded-3xl bg-white border-2 border-slate-200 shadow-2xl p-8 transform-3d animate-tilt hover:scale-105 transition-all duration-500 hover:shadow-indigo-500/20">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="h-4 w-4 rounded-full bg-red-500 shadow-lg" aria-hidden="true"></div>
-                  <div className="h-4 w-4 rounded-full bg-amber-500 shadow-lg" aria-hidden="true"></div>
-                  <div className="h-4 w-4 rounded-full bg-green-500 shadow-lg" aria-hidden="true"></div>
+                  <div className="h-4 w-4 rounded-full bg-red-500 shadow-lg animate-pulse" aria-hidden="true"></div>
+                  <div className="h-4 w-4 rounded-full bg-amber-500 shadow-lg animate-pulse" style={{ animationDelay: "0.2s" }} aria-hidden="true"></div>
+                  <div className="h-4 w-4 rounded-full bg-green-500 shadow-lg animate-pulse" style={{ animationDelay: "0.4s" }} aria-hidden="true"></div>
                   <div className="ml-6 h-8 bg-slate-100 rounded-lg w-3/4 flex items-center px-4 text-xs text-slate-500 font-mono font-semibold">
                     profolio.app/yourname
                   </div>
@@ -100,24 +104,24 @@ export default function Home() {
                 <div className="space-y-8">
                   <div className="space-y-3">
                     <div className="h-12 w-4/5 bg-gradient-to-r from-slate-200 to-slate-300 rounded-xl animate-pulse" aria-hidden="true"></div>
-                    <div className="h-6 w-3/5 bg-slate-100 rounded-lg" aria-hidden="true"></div>
+                    <div className="h-6 w-3/5 bg-slate-100 rounded-lg animate-pulse" style={{ animationDelay: "0.1s" }} aria-hidden="true"></div>
                   </div>
                   <div className="flex gap-3">
-                    <div className="h-8 w-20 bg-gradient-to-r from-indigo-100 to-indigo-200 rounded-full shadow-sm" aria-hidden="true"></div>
-                    <div className="h-8 w-24 bg-gradient-to-r from-purple-100 to-purple-200 rounded-full shadow-sm" aria-hidden="true"></div>
-                    <div className="h-8 w-16 bg-gradient-to-r from-pink-100 to-pink-200 rounded-full shadow-sm" aria-hidden="true"></div>
+                    <div className="h-8 w-20 bg-gradient-to-r from-indigo-100 to-indigo-200 rounded-full shadow-sm animate-pulse" style={{ animationDelay: "0.2s" }} aria-hidden="true"></div>
+                    <div className="h-8 w-24 bg-gradient-to-r from-purple-100 to-purple-200 rounded-full shadow-sm animate-pulse" style={{ animationDelay: "0.3s" }} aria-hidden="true"></div>
+                    <div className="h-8 w-16 bg-gradient-to-r from-pink-100 to-pink-200 rounded-full shadow-sm animate-pulse" style={{ animationDelay: "0.4s" }} aria-hidden="true"></div>
                   </div>
                   <div className="space-y-4">
-                    <div className="h-28 w-full bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200 shadow-sm" aria-hidden="true"></div>
-                    <div className="h-28 w-full bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200 shadow-sm" aria-hidden="true"></div>
+                    <div className="h-28 w-full bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition-shadow" aria-hidden="true"></div>
+                    <div className="h-28 w-full bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition-shadow" aria-hidden="true"></div>
                   </div>
                 </div>
               </div>
 
               {/* Decorative background elements */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-gradient-to-br from-indigo-600/10 via-purple-600/10 to-pink-600/10 blur-[120px] -z-10 rounded-full pointer-events-none animate-pulse" aria-hidden="true"></div>
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600/20 rounded-full blur-3xl -z-10" aria-hidden="true"></div>
-              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl -z-10" aria-hidden="true"></div>
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600/20 rounded-full blur-3xl -z-10 animate-float" aria-hidden="true"></div>
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl -z-10 animate-float-delayed" aria-hidden="true"></div>
             </div>
 
           </div>
@@ -130,7 +134,7 @@ export default function Home() {
           
           <div className="container mx-auto px-6 max-w-7xl relative">
             <div className="text-center mb-20">
-              <div className="inline-flex items-center rounded-full bg-indigo-50 text-indigo-700 px-4 py-2 text-sm font-bold mb-6">
+              <div className="inline-flex items-center rounded-full bg-indigo-50 text-indigo-700 px-4 py-2 text-sm font-bold mb-6 animate-bounce">
                 <Zap className="h-4 w-4 mr-2" />
                 Lightning Fast Setup
               </div>
@@ -178,6 +182,12 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Stats Section */}
+        <StatsSection />
+
+        {/* Testimonials Section */}
+        <Testimonials />
 
         {/* Why Choose Section */}
         <section className="py-32 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
