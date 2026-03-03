@@ -72,23 +72,23 @@ export function StatsSection() {
   ]
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.03),transparent_70%)]" aria-hidden="true"></div>
+    <section className="py-24 bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.03),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)]" aria-hidden="true"></div>
       
       <div className="container mx-auto px-6 max-w-7xl relative">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group relative bg-white rounded-3xl p-8 border-2 border-slate-200 hover:border-indigo-300 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2"
+              className="group relative bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 dark:hover:shadow-indigo-500/30 transition-all duration-500 hover:-translate-y-2"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
               <div className="relative text-center">
-                <div className={`inline-flex h-16 w-16 rounded-2xl bg-gradient-to-br ${stat.color} text-white items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform duration-500`}>
+                <div className={`inline-flex h-16 w-16 rounded-2xl bg-gradient-to-br ${stat.color} text-white items-center justify-center mb-6 shadow-xl dark:shadow-indigo-500/50 group-hover:scale-110 transition-transform duration-500`}>
                   <stat.icon className="h-8 w-8 stroke-[2]" />
                 </div>
-                <div className="text-4xl font-black text-slate-900 mb-2">{stat.value}</div>
-                <div className="text-sm font-bold text-slate-600 uppercase tracking-wider">{stat.label}</div>
+                <div className="text-4xl font-black text-slate-900 dark:text-white mb-2">{stat.value}</div>
+                <div className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">{stat.label}</div>
               </div>
             </div>
           ))}

@@ -50,19 +50,19 @@ export function Testimonials() {
   }, [])
 
   return (
-    <section className="py-32 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.05),transparent_70%)]" aria-hidden="true"></div>
+    <section className="py-32 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.15),transparent_70%)]" aria-hidden="true"></div>
       
       <div className="container mx-auto px-6 max-w-6xl relative">
         <div className="text-center mb-20">
-          <div className="inline-flex items-center rounded-full bg-indigo-50 text-indigo-700 px-4 py-2 text-sm font-bold mb-6">
+          <div className="inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 px-4 py-2 text-sm font-bold mb-6 border border-indigo-200 dark:border-indigo-800">
             <Star className="h-4 w-4 mr-2 fill-current" />
             Loved by Professionals
           </div>
-          <h2 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 mb-6">
-            What Our <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Users Say</span>
+          <h2 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6">
+            What Our <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Users Say</span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
             Join thousands of professionals who transformed their career with Profolio
           </p>
         </div>
@@ -75,15 +75,15 @@ export function Testimonials() {
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <div className="bg-white rounded-3xl p-10 md:p-12 border-2 border-slate-200 shadow-2xl relative">
-                    <Quote className="absolute top-8 right-8 h-16 w-16 text-indigo-100" aria-hidden="true" />
+                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-10 md:p-12 border-2 border-slate-200 dark:border-slate-700 shadow-2xl dark:shadow-indigo-500/20 relative">
+                    <Quote className="absolute top-8 right-8 h-16 w-16 text-indigo-100 dark:text-indigo-900/50" aria-hidden="true" />
                     
                     <div className="flex items-center gap-6 mb-8">
-                      <div className={`h-20 w-20 rounded-full bg-gradient-to-br ${testimonial.avatar} shadow-xl flex-shrink-0`}></div>
+                      <div className={`h-20 w-20 rounded-full bg-gradient-to-br ${testimonial.avatar} shadow-xl dark:shadow-indigo-500/50 flex-shrink-0`}></div>
                       <div>
-                        <div className="text-2xl font-black text-slate-900">{testimonial.name}</div>
-                        <div className="text-base font-semibold text-slate-600">{testimonial.role}</div>
-                        <div className="text-sm font-bold text-indigo-600">{testimonial.company}</div>
+                        <div className="text-2xl font-black text-slate-900 dark:text-white">{testimonial.name}</div>
+                        <div className="text-base font-semibold text-slate-600 dark:text-slate-400">{testimonial.role}</div>
+                        <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{testimonial.company}</div>
                       </div>
                     </div>
 
@@ -93,7 +93,7 @@ export function Testimonials() {
                       ))}
                     </div>
 
-                    <p className="text-xl text-slate-700 leading-relaxed font-medium">
+                    <p className="text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                       "{testimonial.content}"
                     </p>
                   </div>
@@ -110,8 +110,8 @@ export function Testimonials() {
                 onClick={() => setCurrentIndex(index)}
                 className={`h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "w-12 bg-gradient-to-r from-indigo-600 to-purple-600"
-                    : "w-3 bg-slate-300 hover:bg-slate-400"
+                    ? "w-12 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500"
+                    : "w-3 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
               />
