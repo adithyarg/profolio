@@ -329,12 +329,10 @@ export default function Home() {
                   Get Started Free
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-16 px-12 text-lg rounded-2xl border-2 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold hover:scale-105 hover:border-white/50">
-                <Link href="/adithyarg">
-                  <span className="flex items-center gap-3">
-                    View Live Demo
-                    <ArrowRight className="h-5 w-5" />
-                  </span>
+              <Button asChild variant="outline" size="lg" className="h-16 px-12 text-lg rounded-2xl border-2 border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold hover:scale-105 hover:border-white/50">
+                <Link href="/adithyarg" className="flex items-center gap-3">
+                  View Live Demo
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
             </div>
@@ -353,8 +351,8 @@ export default function Home() {
           </div>
           <p className="text-base font-medium text-slate-400">© 2026 Profolio Inc. All rights reserved.</p>
           <div className="flex gap-8 text-base font-semibold text-slate-400">
-            <a href="#" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Terms</a>
+            <Link href="/privacy" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Terms</Link>
           </div>
         </div>
       </footer>
