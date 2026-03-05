@@ -12,7 +12,8 @@ import {
     Blocks,
     LogOut,
     ExternalLink,
-    Sparkles
+    Sparkles,
+    Palette
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
@@ -28,6 +29,7 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
         { name: "Certificates", href: "/dashboard/certificates", icon: Award },
         { name: "Awards", href: "/dashboard/awards", icon: GraduationCap },
         { name: "Skills", href: "/dashboard/skills", icon: Blocks },
+        { name: "Themes", href: "/dashboard/themes", icon: Palette },
     ]
 
     const handleLogout = async () => {

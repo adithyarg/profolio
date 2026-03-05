@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Github, ExternalLink, MapPin, Briefcase, Calendar, Award, CheckCircle2, ChevronRight, Mail, Phone, Linkedin, Globe, GraduationCap } from "lucide-react"
 import Image from "next/image"
+import { getTheme } from "@/lib/themes"
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
     const supabase = createClient()
@@ -53,6 +54,9 @@ export default async function PortfolioPage({ params }: { params: { username: st
 
     if (!profile) return notFound()
 
+    // Get the theme configuration
+    const theme = getTheme(profile.theme)
+
     // Track page view asynchronously
     supabase.from("portfolio_views").insert([{ profile_id: profile.id }])
 
@@ -73,12 +77,12 @@ export default async function PortfolioPage({ params }: { params: { username: st
     ])
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-indigo-500/30 pb-20 scroll-smooth">
+        <div className={`min-h-screen ${theme.styles.sectionClass} text-${theme.colors.text} font-sans selection:bg-indigo-500/30 pb-20 scroll-smooth`}>
 
             {/* Sticky Navigation */}
-            <nav className="sticky top-0 z-50 w-full border-b border-slate-200/50 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 transition-all">
+            <nav className={`sticky top-0 z-50 w-full border-b border-${theme.colors.border}/50 bg-${theme.colors.cardBg}/70 backdrop-blur-xl supports-[backdrop-filter]:bg-${theme.colors.cardBg}/60 transition-all`}>
                 <div className="container mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-                    <span className="font-bold tracking-tight text-slate-900">{profile.full_name}</span>
+                    <span className={`font-bold tracking-tight text-${theme.colors.text}`}>{profile.full_name}</span>
                     <div className="hidden lg:flex gap-8 text-[13px] font-semibold tracking-wide uppercase text-slate-500 dark:text-slate-400">
                         {profile.bio && <a href="#about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>}
                         {(experiences?.length ?? 0) > 0 && <a href="#experience" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Experience</a>}
