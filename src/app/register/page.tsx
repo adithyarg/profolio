@@ -21,7 +21,7 @@ export default function RegisterPage({ searchParams }: { searchParams: { error?:
                         <div className="h-12 w-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
                             <span className="text-white font-extrabold text-xl">P</span>
                         </div>
-                        <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio</span>
+                        <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio 1.0</span>
                     </Link>
                 </div>
 

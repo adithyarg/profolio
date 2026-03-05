@@ -8,7 +8,7 @@ const testimonials = [
     name: "Sarah Chen",
     role: "Senior Software Engineer",
     company: "Google",
-    content: "Profolio helped me land my dream job! The clean design and easy updates made it perfect for showcasing my projects. Recruiters loved it.",
+    content: "Profolio 1.0 helped me land my dream job! The clean design and easy updates made it perfect for showcasing my projects. Recruiters loved it.",
     avatar: "from-indigo-400 to-indigo-600",
     rating: 5
   },
@@ -16,7 +16,7 @@ const testimonials = [
     name: "Marcus Rodriguez",
     role: "Product Designer",
     company: "Airbnb",
-    content: "As a designer, I'm picky about portfolios. Profolio nailed it - beautiful, fast, and professional. Got 3x more interview requests!",
+    content: "As a designer, I'm picky about portfolios. Profolio 1.0 nailed it - beautiful, fast, and professional. Got 3x more interview requests!",
     avatar: "from-purple-400 to-purple-600",
     rating: 5
   },
@@ -32,7 +32,7 @@ const testimonials = [
     name: "David Kim",
     role: "Data Scientist",
     company: "Meta",
-    content: "Switched from PDF resumes to Profolio and never looked back. The analytics feature is a game-changer. Highly recommend!",
+    content: "Switched from PDF resumes to Profolio 1.0 and never looked back. The analytics feature is a game-changer. Highly recommend!",
     avatar: "from-blue-400 to-blue-600",
     rating: 5
   }
@@ -63,7 +63,7 @@ export function Testimonials() {
             What Our <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Users Say</span>
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of professionals who transformed their career with Profolio
+            Join thousands of professionals who transformed their career with Profolio 1.0
           </p>
         </div>
 

@@ -17,7 +17,7 @@ export default function Home() {
           <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-indigo-700 dark:from-indigo-500 dark:to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30 dark:shadow-indigo-500/50">
             <span className="text-white font-extrabold text-lg">P</span>
           </div>
-          <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Profolio</span>
+          <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Profolio 1.0</span>
         </Link>
         <nav className="flex items-center gap-6">
           <ThemeToggle />
@@ -202,7 +202,7 @@ export default function Home() {
                 Trusted by Professionals
               </div>
               <h2 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6">
-                Why Choose <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Profolio</span>
+                Why Choose <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Profolio 1.0</span>
               </h2>
               <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
                 Stand out from the crowd with a portfolio that showcases your work, not just lists it
@@ -270,13 +270,13 @@ export default function Home() {
               <h2 className="text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-6">
                 Got <span className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Questions?</span>
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300 leading-relaxed">Everything you need to know about Profolio</p>
+              <p className="text-xl text-slate-600 dark:text-slate-300 leading-relaxed">Everything you need to know about Profolio 1.0</p>
             </div>
             
             <div className="space-y-6">
               <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-xl dark:hover:shadow-indigo-500/20 transition-all duration-300">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">How is Profolio different from a PDF resume?</h3>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Unlike static PDFs, Profolio creates a dynamic, interactive portfolio that's always up-to-date. Recruiters can easily navigate through your experience, view your projects with live links, and access everything from a single shareable URL.</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">How is Profolio 1.0 different from a PDF resume?</h3>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Unlike static PDFs, Profolio 1.0 creates a dynamic, interactive portfolio that's always up-to-date. Recruiters can easily navigate through your experience, view your projects with live links, and access everything from a single shareable URL.</p>
               </div>
               
               <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-xl dark:hover:shadow-indigo-500/20 transition-all duration-300">
@@ -295,13 +295,13 @@ export default function Home() {
               </div>
               
               <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-xl dark:hover:shadow-indigo-500/20 transition-all duration-300">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Can I use Profolio for different industries?</h3>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Yes! Profolio works for any profession - from software engineers and designers to marketers, consultants, and beyond. The flexible structure adapts to showcase your unique experience.</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Can I use Profolio 1.0 for different industries?</h3>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Yes! Profolio 1.0 works for any profession - from software engineers and designers to marketers, consultants, and beyond. The flexible structure adapts to showcase your unique experience.</p>
               </div>
               
               <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-xl dark:hover:shadow-indigo-500/20 transition-all duration-300">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">What if I don't have much experience yet?</h3>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Profolio is perfect for professionals at any career stage. Whether you're a student with academic projects or a seasoned professional, our platform helps you present your experience in the best possible light.</p>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">Profolio 1.0 is perfect for professionals at any career stage. Whether you're a student with academic projects or a seasoned professional, our platform helps you present your experience in the best possible light.</p>
               </div>
             </div>
           </div>
@@ -349,9 +349,9 @@ export default function Home() {
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-3 font-bold text-white">
             <div className="h-10 w-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-sm shadow-lg">P</div>
-            <span className="text-2xl">Profolio</span>
+            <span className="text-2xl">Profolio 1.0</span>
           </div>
-          <p className="text-base font-medium text-slate-400">© 2026 Profolio Inc. All rights reserved.</p>
+          <p className="text-base font-medium text-slate-400">© 2026 Profolio 1.0 Inc. All rights reserved.</p>
           <div className="flex gap-8 text-base font-semibold text-slate-400">
             <Link href="/privacy" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-white after:transition-all after:duration-300">Terms</Link>

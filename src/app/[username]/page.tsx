@@ -391,7 +391,7 @@ export default async function PortfolioPage({ params }: { params: { username: st
 
             <footer className="text-center pb-8 pt-8">
                 <p className="text-xs font-semibold text-slate-400">
-                    Built with <a href="/" className="text-indigo-500 hover:text-indigo-600 transition-colors">Profolio</a>
+                    Built with <a href="/" className="text-indigo-500 hover:text-indigo-600 transition-colors">Profolio 1.0</a>
                 </p>
             </footer>
         </div>

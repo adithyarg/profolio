@@ -43,7 +43,7 @@ export function DashboardSidebar({ user, profile }: { user: any, profile: any })
                         <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30 dark:shadow-indigo-500/50">
                             <span className="text-white font-extrabold text-lg">P</span>
                         </div>
-                        <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Profolio</span>
+                        <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Profolio 1.0</span>
                     </Link>
                     <ThemeToggle />
                 </div>

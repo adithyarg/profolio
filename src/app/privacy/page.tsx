@@ -10,7 +10,7 @@ export default function PrivacyPage() {
           <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
             <span className="text-white font-extrabold text-lg">P</span>
           </div>
-          <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio</span>
+          <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio 1.0</span>
         </Link>
         <Button asChild variant="outline" className="rounded-full">
           <Link href="/" className="flex items-center gap-2">
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Introduction</h2>
             <p className="text-slate-600 leading-relaxed">
-              Welcome to Profolio. We respect your privacy and are committed to protecting your personal data. 
+              Welcome to Profolio 1.0. We respect your privacy and are committed to protecting your personal data. 
               This privacy policy explains how we collect, use, and safeguard your information when you use our platform.
             </p>
           </section>
@@ -106,9 +106,9 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-3 font-bold text-white">
             <div className="h-10 w-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-sm shadow-lg">P</div>
-            <span className="text-2xl">Profolio</span>
+            <span className="text-2xl">Profolio 1.0</span>
           </div>
-          <p className="text-base font-medium text-slate-400">© 2026 Profolio Inc. All rights reserved.</p>
+          <p className="text-base font-medium text-slate-400">© 2026 Profolio 1.0 Inc. All rights reserved.</p>
           <div className="flex gap-8 text-base font-semibold text-slate-400">
             <Link href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors duration-300">Terms</Link>

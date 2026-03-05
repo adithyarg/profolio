@@ -10,7 +10,7 @@ export default function TermsPage() {
           <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
             <span className="text-white font-extrabold text-lg">P</span>
           </div>
-          <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio</span>
+          <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Profolio 1.0</span>
         </Link>
         <Button asChild variant="outline" className="rounded-full">
           <Link href="/" className="flex items-center gap-2">
@@ -28,7 +28,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Agreement to Terms</h2>
             <p className="text-slate-600 leading-relaxed">
-              By accessing or using Profolio, you agree to be bound by these Terms of Service. 
+              By accessing or using Profolio 1.0, you agree to be bound by these Terms of Service. 
               If you disagree with any part of these terms, you may not access the service.
             </p>
           </section>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Use of Service</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              Profolio provides a platform for creating and hosting professional portfolios. You agree to:
+              Profolio 1.0 provides a platform for creating and hosting professional portfolios. You agree to:
             </p>
             <ul className="list-disc pl-6 text-slate-600 space-y-2">
               <li>Provide accurate and complete information</li>
@@ -50,7 +50,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">User Content</h2>
             <p className="text-slate-600 leading-relaxed">
-              You retain all rights to the content you upload to Profolio. By uploading content, you grant us 
+              You retain all rights to the content you upload to Profolio 1.0. By uploading content, you grant us 
               a license to display, store, and distribute your content as necessary to provide the service. 
               You are responsible for ensuring you have the right to share any content you upload.
             </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Intellectual Property</h2>
             <p className="text-slate-600 leading-relaxed">
-              The Profolio platform, including its design, features, and functionality, is owned by Profolio Inc. 
+              The Profolio 1.0 platform, including its design, features, and functionality, is owned by Profolio 1.0 Inc. 
               and is protected by copyright, trademark, and other intellectual property laws.
             </p>
           </section>
@@ -75,7 +75,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Disclaimer of Warranties</h2>
             <p className="text-slate-600 leading-relaxed">
-              Profolio is provided "as is" without warranties of any kind, either express or implied. 
+              Profolio 1.0 is provided "as is" without warranties of any kind, either express or implied. 
               We do not guarantee that the service will be uninterrupted, secure, or error-free.
             </p>
           </section>
@@ -83,7 +83,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Limitation of Liability</h2>
             <p className="text-slate-600 leading-relaxed">
-              Profolio Inc. shall not be liable for any indirect, incidental, special, consequential, or punitive 
+              Profolio 1.0 Inc. shall not be liable for any indirect, incidental, special, consequential, or punitive 
               damages resulting from your use of or inability to use the service.
             </p>
           </section>
@@ -109,9 +109,9 @@ export default function TermsPage() {
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-3 font-bold text-white">
             <div className="h-10 w-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-sm shadow-lg">P</div>
-            <span className="text-2xl">Profolio</span>
+            <span className="text-2xl">Profolio 1.0</span>
           </div>
-          <p className="text-base font-medium text-slate-400">© 2026 Profolio Inc. All rights reserved.</p>
+          <p className="text-base font-medium text-slate-400">© 2026 Profolio 1.0 Inc. All rights reserved.</p>
           <div className="flex gap-8 text-base font-semibold text-slate-400">
             <Link href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors duration-300">Terms</Link>
